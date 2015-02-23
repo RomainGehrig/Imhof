@@ -18,7 +18,6 @@ public final class PointGeo {
     public double longitude() {
         return this.longitude;
     }
-
     public double latitude() {
         return this.latitude;
     }
