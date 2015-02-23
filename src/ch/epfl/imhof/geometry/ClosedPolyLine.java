@@ -3,9 +3,12 @@ package ch.epfl.imhof.geometry;
 
 import java.util.List;
 
+import ch.epfl.imhof.
+
 /**
  * représente une polyligne fermée
  * @author Yura Tak (247528)
+ * @author Romain Gehrig (223316)
  *
  */
 public final class ClosedPolyLine extends PolyLine {
@@ -28,7 +31,7 @@ public final class ClosedPolyLine extends PolyLine {
     public double area(){
         double area = 0;
         for(int i = 0; i < points.size(); ++i){
-            area += points.get(i).x()*(getPoint(i+1).y() - getPoint(i-1).y());
+            area += getPoint(i).x()*(getPoint(i+1).y() - getPoint(i-1).y());
         }
         
         if(area<0){
@@ -78,11 +81,11 @@ public final class ClosedPolyLine extends PolyLine {
             Point p2 = getPoint(i+1);
             
             if(p1.y() <= p.y()){
-                if(p2.y() > p.y() && inLeft(p, p1, p2)){
+                if(p2.y() > p.y() && isLeft(p, p1, p2)){
                     ++indice;
                 }  
             } else{
-                if(p2.y() <= p.y() && inLeft(p, p2, p1)){
+                if(p2.y() <= p.y() && isLeft(p, p2, p1)){
                     --indice;
                 }   
             }
