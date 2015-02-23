@@ -2,3 +2,4 @@ target/
 project/
 *.swp
 .DS_STORE
+save.zip
