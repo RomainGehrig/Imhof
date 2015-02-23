@@ -58,7 +58,7 @@ public abstract class PolyLine {
      *
      */
     public final static class Builder{
-        ArrayList<Point> p = new ArrayList<Point>();
+        List<Point> p = new ArrayList<Point>();
         
         /**
          * ajoute le point donné à la fin de la liste des sommets de la polyligne en cours de construction
