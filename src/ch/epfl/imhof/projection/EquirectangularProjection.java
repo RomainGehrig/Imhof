@@ -4,6 +4,12 @@ package ch.epfl.imhof.projection;
 import ch.epfl.imhof.geometry.Point;
 import ch.epfl.imhof.PointGeo;
 
+/**
+ * représente la projection équirectangulaire
+ * @author Yura Tak (247528)
+ * @author Romain Gehrig (223316)
+ *
+ */
 public final class EquirectangularProjection implements Projection{
     public Point project(PointGeo point) {
         return new Point(point.longitude(), point.latitude());
