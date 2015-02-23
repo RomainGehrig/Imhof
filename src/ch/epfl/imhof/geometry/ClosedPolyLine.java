@@ -3,8 +3,6 @@ package ch.epfl.imhof.geometry;
 
 import java.util.List;
 
-import ch.epfl.imhof.
-
 /**
  * représente une polyligne fermée
  * @author Yura Tak (247528)
