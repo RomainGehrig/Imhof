@@ -3,3 +3,6 @@ project/
 *.swp
 .DS_STORE
 save.zip
+*.class
+.project
+.classpath
