@@ -56,8 +56,8 @@ public abstract class OSMEntity {
      */
     public static class Builder{
         
-        private long id;
-        private Attributes.Builder attributes = new Attributes.Builder();
+        protected long id;
+        protected Attributes.Builder attributes = new Attributes.Builder();
         private boolean isIncomplete = false;
         
         /**
@@ -93,5 +93,6 @@ public abstract class OSMEntity {
         public boolean isIncomplete(){
             return isIncomplete;
         }
+        
     }
 }
