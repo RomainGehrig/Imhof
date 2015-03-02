@@ -54,7 +54,7 @@ public abstract class OSMEntity {
      * @author Romain Gehrig (223316)
      *
      */
-    public final static class Builder{
+    public static class Builder{
         
         private long id;
         private Attributes.Builder attributes = new Attributes.Builder();
