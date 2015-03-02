@@ -1,7 +1,5 @@
 package ch.epfl.imhof.osm;
 
-import java.util.Collections;
-
 import ch.epfl.imhof.Attributes;
 
 /**
