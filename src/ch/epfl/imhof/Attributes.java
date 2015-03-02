@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * représente un ensemble d'attributs et la valeur qui leur est associée
+ * Représente un ensemble d'attributs et la valeur qui leur est associée
  * @author Yura Tak(247528)
  * @author Romain Gehrig (223316)
  *
@@ -15,44 +15,44 @@ public final class Attributes {
     private Map<String, String> attributes;
     
     /**
-     * construit un ensemble d'attributs avec les paires clef/valeur présentes dans la table associative donnée
-     * @param attributes
+     * Construit un ensemble d'attributs avec les paires clef/valeur présentes dans la table associative donnée
+     * @param attributes Map des clefs/valeurs
      */
     public Attributes(Map<String, String> attributes){
         this.attributes = Collections.unmodifiableMap(new HashMap<String, String>(attributes));
     }
     
     /**
-     * retourne vrai si et seulement si l'ensemble d'attributs est vide
-     * @return
+     * Retourne vrai si et seulement si l'ensemble d'attributs est vide
+     * @return Vrai si vide, faux sinon
      */
     public boolean isEmpty(){
         return attributes.isEmpty();
     }
     
     /**
-     * retourne vrai si l'ensemble d'attributs contient la clef donnée
-     * @param key
-     * @return
+     * Retourne vrai si l'ensemble d'attributs contient la clef donnée
+     * @param key Clef à vérifier
+     * @return Vrai si présent, faux sinon
      */
     public boolean contains(String key){
         return attributes.containsKey(key);
     }
     
     /**
-     * retourne la valeur associée à la clef donnée, ou null si la clef n'existe pas
-     * @param key
-     * @return
+     * Retourne la valeur associée à la clef donnée, ou null si la clef n'existe pas
+     * @param key Clef dont on veut la valeur associée
+     * @return La valeur associée
      */
     public String get(String key){
         return attributes.get(key);
     }
     
     /**
-     * retourne la valeur associée à la clef donnée, ou la valeur par défaut donnée si aucune valeur ne lui est associée
-     * @param key
-     * @param defaultvalue
-     * @return
+     * Retourne la valeur associée à la clef donnée, ou la valeur par défaut donnée si aucune valeur ne lui est associée
+     * @param key Nom de l'attribut
+     * @param defaultvalue Valeur par défaut au cas où l'attribut n'existe pas
+     * @return La valeur associée ou la valeur par défaut s'il n'y a pas de valeur associée
      */
     public String get(String key, String defaultvalue){
         if(contains(key)){
@@ -63,11 +63,11 @@ public final class Attributes {
     }
     
     /**
-     * retourne l'entier associé à la clef donnée, ou la valeur par défaut donnée 
+     * Retourne l'entier associé à la clef donnée, ou la valeur par défaut donnée 
      * si aucune valeur ne lui est associée, ou si cette valeur n'est pas un entier valide
-     * @param key
-     * @param defaultvalue
-     * @return
+     * @param key Nom de l'attribut à convertir
+     * @param defaultvalue Valeur par défaut au cas où l'attribut n'est pas convertible
+     * @return La valeur convertie en entier, ou la valeur par défaut s'il y a eu un problème
      */
     public int get(String key, int defaultvalue){
         try{
@@ -79,9 +79,9 @@ public final class Attributes {
     }
     
     /**
-     * retourne une version filtrée des attributs ne contenant que ceux dont le nom figure dans l'ensemble passé
-     * @param keysToKeep
-     * @return
+     * Retourne une version filtrée des attributs ne contenant que ceux dont le nom figure dans l'ensemble passé
+     * @param keysToKeep Set des clefs à garder
+     * @return Un nouvel objet Attributes ne contenant que les clefs mentionnées
      */
     public Attributes keepOnlyKeys(Set<String> keysToKeep){
         Map<String, String> tmp = new HashMap<String, String>();
@@ -94,7 +94,7 @@ public final class Attributes {
     }
     
     /**
-     * sert de bâtisseur à la classe Attributes
+     * Sert de bâtisseur à la classe Attributes
      * @author Yura Tak(247528)
      * @author Romain Gehrig (223316)
      *
@@ -103,18 +103,18 @@ public final class Attributes {
         private Map<String, String> attributes = new HashMap<>();
         
         /**
-         * ajoute l'association (clef, valeur) donnée à l'ensemble d'attributs en cours de construction
+         * Ajoute l'association (clef, valeur) donnée à l'ensemble d'attributs en cours de construction
          * Si un attribut de même nom avait déjà été ajouté précédemment à l'ensemble, sa valeur est remplacée par celle donnée
-         * @param key
-         * @param value
+         * @param key Clef
+         * @param value Valeur
          */
         public void put(String key, String value){
             attributes.put(key, value);
         }
         
         /**
-         * construit un ensemble d'attributs contenant les associations clef/valeur ajoutées jusqu'à présent
-         * @return
+         * Construit un ensemble d'attributs contenant les associations clef/valeur ajoutées jusqu'à présent
+         * @return L'objet Attributes construit
          */
         public Attributes build(){
             return (new Attributes(attributes));

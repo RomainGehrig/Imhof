@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * représente un polygone à trous
+ * Représente un polygone à trous
  * @author Yura Tak (247528)
  *
  */
@@ -14,9 +14,9 @@ public final class Polygon {
     private final List<ClosedPolyLine> holes;
     
     /**
-     * construit un polygone avec l'enveloppe et les trous donnés
-     * @param shell
-     * @param holes
+     * Construit un polygone avec l'enveloppe et les trous donnés
+     * @param shell L'enveloppe du polygone
+     * @param holes Liste des trous
      */
     public Polygon(ClosedPolyLine shell, List<ClosedPolyLine> holes){
         this.shell = shell;
@@ -24,24 +24,24 @@ public final class Polygon {
     }
     
     /**
-     * construit un polygone avec l'enveloppe donnée, sans trous
-     * @param shell
+     * Construit un polygone avec l'enveloppe donnée, sans trous
+     * @param shell L'enveloppe du polygone
      */
     public Polygon(ClosedPolyLine shell){
         this(shell, Collections.emptyList());   
     }
     
     /**
-     * retourne l'enveloppe
-     * @return
+     * Getter sur l'enveloppe
+     * @return shell
      */
     public PolyLine shell(){
         return shell;
     }
     
     /**
-     * retouren la liste des trous
-     * @return
+     * Getter sur la liste de trou
+     * @return holes
      */
     public List<ClosedPolyLine> holes(){
         return holes;

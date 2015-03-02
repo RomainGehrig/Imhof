@@ -5,7 +5,7 @@ import ch.epfl.imhof.geometry.Point;
 import ch.epfl.imhof.PointGeo;
 
 /**
- * représente la projection CH1903
+ * Représente la projection CH1903
  * @author Yura Tak (247528)
  * @author Romain Gehrig (223316)
  *
@@ -13,10 +13,10 @@ import ch.epfl.imhof.PointGeo;
 public final class CH1903Projection implements Projection {
 
     /**
-     * projette un point geographique en un point cartésien en utilisant
+     * Projette un point geographique en un point cartésien en utilisant
      * la projection CH1903
-     * @params point, point géographique
-     * @return un point cartésien
+     * @param point Le point en coordonnées géographiques
+     * @return Le point en coordonnées cartésiennes
      */
     public Point project(PointGeo point) {
         double degreeLong = Math.toDegrees(point.longitude());
@@ -42,10 +42,10 @@ public final class CH1903Projection implements Projection {
     }
 
     /**
-     * projette un point geographique en un point géographique en utilisant
+     * Projette un point geographique en un point géographique en utilisant
      * la projection inverse de CH1903
-     * @param un point cartésien
-     * @return point, point géographique
+     * @param point Le point en coordonnées cartésiennes
+     * @return Le point en coordonnées géographiques
      */
     public PointGeo inverse(Point point) {
         double x = (point.x()-6e5) / 1e6;

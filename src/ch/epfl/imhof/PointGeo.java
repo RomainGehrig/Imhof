@@ -1,7 +1,7 @@
 package ch.epfl.imhof;
 
 /**
- * représente un point à la surface de la Terre, dont la position est exprimée en coordonnées sphériques dans le système WGS 84
+ * Représente un point à la surface de la Terre, dont la position est exprimée en coordonnées sphériques dans le système WGS 84
  * @author Yura Tak (247528)
  * @author Romain Gehrig (223316)
  *
@@ -12,14 +12,12 @@ public final class PointGeo {
     
     
     /**
-     * construit un point avec la longitude et la latitude données (en radians)
-     * @param longitude
-     *          la longitude du point, en radians
-     * @param latitude
-     *          la latitude du point, en radians
-     * @throw IllegalArgumentException
+     * Construit un point avec la longitude et la latitude données (en radians)
+     * @param longitude la longitude du point, en radians
+     * @param latitude  la latitude du point, en radians
+     * @throws IllegalArgumentException
      *          si la longitude est invalide, c-a-d hors de l'intervalle[-π; π]
-     * @throw IllegalArgumentException
+     * @throws IllegalArgumentException
      *          si la latitude est invalide, c-a-d hors de l'intervalle [-π/2; π/2]
      */
     public PointGeo(double longitude, double latitude){
@@ -35,7 +33,7 @@ public final class PointGeo {
     }
     
     /**
-     * 
+     * Getter sur la longitude
      * @return la longitude
      */
     public double longitude(){
@@ -43,7 +41,7 @@ public final class PointGeo {
     }
     
     /**
-     * 
+     * Getter sur la latitude
      * @return la latitude
      */
     public double latitude(){

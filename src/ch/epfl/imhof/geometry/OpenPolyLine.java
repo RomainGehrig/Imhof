@@ -4,7 +4,7 @@ package ch.epfl.imhof.geometry;
 import java.util.List;
 
 /**
- * représente une polyligne ouverte
+ * Représente une polyligne ouverte
  * @author Yura Tak (247528)
  * @author Romain Gehrig (223316)
  *
@@ -12,8 +12,8 @@ import java.util.List;
 public final class OpenPolyLine extends PolyLine {
 
     /**
-     * construit une polyligne ouverte de sommets donnés
-     * @param points
+     * Construit une polyligne ouverte de sommets donnés
+     * @param points Liste de sommets
      */
     public OpenPolyLine(List<Point> points) {
         super(points);

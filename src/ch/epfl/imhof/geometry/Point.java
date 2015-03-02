@@ -2,7 +2,7 @@
 package ch.epfl.imhof.geometry;
 
 /**
- * représente un point dans le plan, en coordonnées cartésiennes
+ * Représente un point dans le plan, en coordonnées cartésiennes
  * @author Yura Tak (247528)
  * @author Romain Gehrig (223316)
  */
@@ -11,7 +11,7 @@ public final class Point {
     private final double y;
     
     /**
-     * construit un point avec les coordonnées données
+     * Construit un point avec les coordonnées données
      * @param x coordonnée x
      * @param y coordonnée y
      */
@@ -21,15 +21,15 @@ public final class Point {
     }
     
     /**
-     * 
-     * @return coordonnée x
+     * Getter sur la coordonnée x
+     * @return Coordonnée x
      */
     public double x(){
         return x;
     }
     
     /**
-     * 
+     * Getter sur la coordonnée y
      * @return coordonnée y
      */
     public double y(){

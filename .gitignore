@@ -4,5 +4,6 @@ project/
 .DS_STORE
 save.zip
 *.class
+docs/
 .project
 .classpath

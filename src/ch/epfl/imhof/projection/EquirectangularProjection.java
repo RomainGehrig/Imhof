@@ -5,7 +5,7 @@ import ch.epfl.imhof.geometry.Point;
 import ch.epfl.imhof.PointGeo;
 
 /**
- * représente la projection équirectangulaire
+ * Représente la projection équirectangulaire
  * @author Yura Tak (247528)
  * @author Romain Gehrig (223316)
  *

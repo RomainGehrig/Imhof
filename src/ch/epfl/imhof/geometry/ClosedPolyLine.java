@@ -4,15 +4,15 @@ package ch.epfl.imhof.geometry;
 import java.util.List;
 
 /**
- * représente une polyligne fermée
+ * Représente une polyligne fermée
  * @author Yura Tak (247528)
  * @author Romain Gehrig (223316)
  *
  */
 public final class ClosedPolyLine extends PolyLine {
     /**
-     * construit une polyligne fermée ayant les sommets données
-     * @param points
+     * Construit une polyligne fermée ayant les sommets données
+     * @param points Liste des sommets
      */
     public ClosedPolyLine(List<Point> points) {
         super(points);
@@ -23,7 +23,7 @@ public final class ClosedPolyLine extends PolyLine {
     }
     
     /**
-     * retourne l'aire de la polyligne (toujours positive)
+     * Retourne l'aire de la polyligne (toujours positive)
      * @return l'aire
      */
     public double area(){
@@ -40,8 +40,8 @@ public final class ClosedPolyLine extends PolyLine {
     }
 
     /**
-     * permet d'obtenir un sommet d'indice généralisé
-     * @param indice
+     * Permet d'obtenir un sommet d'indice généralisé
+     * @param n L'indice (positif ou négatif)
      * @return sommet se trouvant à cet endroit
      */
     private Point getPoint(int n) {
@@ -49,11 +49,11 @@ public final class ClosedPolyLine extends PolyLine {
     }
 
     /**
-     * retourne vrai si le point p se trouve à gauche d'une ligne définie par deux points p1, p2
-     * @param p
-     * @param p1
-     * @param p2
-     * @return
+     * Retourne vrai si le point p se trouve à gauche d'une ligne définie par deux points p1, p2
+     * @param point Point à vérifier
+     * @param p1    1er pt de la ligne
+     * @param p2    2e pt de la ligne
+     * @return Vrai si le pt se trouve à gauche, faux sinon
      */
     private boolean isLeft(Point point, Point p1, Point p2) {
         double x = point.x();
@@ -68,9 +68,9 @@ public final class ClosedPolyLine extends PolyLine {
     }
 
     /**
-     * retourne vrai si et seulement si le point donné est à l'intérieur de la polyligne
-     * @param p
-     * @return
+     * Retourne vrai si et seulement si le point donné est à l'intérieur de la polyligne
+     * @param p Le point à vérifier
+     * @return Vrai si le pt se trouve à l'intérieur, faux sinon
      */
     public boolean containsPoint(Point p){
         int indice = 0;
@@ -82,13 +82,12 @@ public final class ClosedPolyLine extends PolyLine {
                 if(p2.y() > p.y() && isLeft(p, p1, p2)){
                     ++indice;
                 }  
-            } else{
+            } else {
                 if(p2.y() <= p.y() && isLeft(p, p2, p1)){
                     --indice;
                 }   
             }
         }
-        
         return (indice != 0);
     }
 
