@@ -7,7 +7,6 @@ import java.util.Collections;
  * @author Yura Tak (247528)
  * @author Romain Gehrig (223316)
  *
- * @param <T>
  */
 public final class Attributed<T> {
     private final T value;

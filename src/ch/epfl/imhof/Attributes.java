@@ -55,10 +55,10 @@ public final class Attributes {
      * @return
      */
     public String get(String key, String defaultvalue){
-        if(attributes.get(key) == null){
-            return defaultvalue;
-        } else{
+        if(contains(key)){
             return attributes.get(key);
+        } else{
+            return defaultvalue;
         }
     }
     
@@ -71,7 +71,7 @@ public final class Attributes {
      */
     public int get(String key, int defaultvalue){
         try{
-            return Integer.parseInt(attributes.get(key));
+            return Integer.parseInt(get(key)); // Throw si nbr invalide ou null
         }
         catch(NumberFormatException e){
             return defaultvalue;
@@ -85,7 +85,9 @@ public final class Attributes {
      */
     public Attributes keepOnlyKeys(Set<String> keysToKeep){
         Map<String, String> tmp = new HashMap<String, String>();
-        for(String key : keysToKeep){
+        keysToKeep.retainAll(attributes.keySet()); // Filtre pour garder les clés qui font partie de notre attributes
+
+        for(String key: keysToKeep){
             tmp.put(key, get(key));
         }
         return new Attributes(tmp);

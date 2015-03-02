@@ -19,6 +19,7 @@ public class AttributesTest {
         b.put("natural", "water");
         b.put("name", "Lac Léman");
         b.put("ele", "372");
+        b.put("testnull", null);
         a = b.build();
     }
     
@@ -39,15 +40,24 @@ public class AttributesTest {
         assertEquals("Lac Léman", a.get("name", "Lac"));
         assertEquals("Lac", a.get("nameTest", "Lac"));
         assertEquals(372, a.get("ele", 0));
+        assertEquals(null, a.get("testnull"));
     }
     
     @Test
     public void keepOnlyKeys(){
         Set<String> s = new HashSet<>();
         s.add("ele");
-        a.keepOnlyKeys(s);
-        assertFalse(s.contains("natural"));
+        Attributes a2 = a.keepOnlyKeys(s);
+        assertFalse(a2.contains("natural"));
     }
     
+    @Test
+    public void withUnknown_keepOnlyKeys(){
+        Set<String> s = new HashSet<>();
+        s.add("Ceci n'est pas une clé");
+        Attributes a2 = a.keepOnlyKeys(s);
+        assertFalse(a2.contains("Ceci n'est pas une clé"));
+        assertTrue(a2.isEmpty());
+    }
     
 }
