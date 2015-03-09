@@ -16,8 +16,12 @@ public abstract class OSMEntity {
      * construit une entité OSM dotée de l'identifiant unique et des attributs donnés
      * @param id L'identifiant unique
      * @param attributes Attributs donnés
+     * @throws NullPointerException si attributes est vide
      */
     public OSMEntity(long id, Attributes attributes){
+        if(attributes == null){
+            throw new NullPointerException("attributes est vide");
+        }
         this.id = id;
         this.attributes = attributes;
     }

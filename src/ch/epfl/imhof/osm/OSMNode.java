@@ -12,10 +12,6 @@ import ch.epfl.imhof.PointGeo;
 public final class OSMNode extends OSMEntity{
     
     private PointGeo position;
-
-    public OSMNode(long id, Attributes attributes) {
-        super(id, attributes);
-    }
     
     /**
      * construit un nœud OSM avec l'identifiant, la position et les attributs donnés
@@ -25,7 +21,12 @@ public final class OSMNode extends OSMEntity{
      */
     public OSMNode(long id, PointGeo position, Attributes attributes){
         super(id, attributes);
-        this.position = position;
+        if(position != null){
+            this.position = position;
+        } else {
+            throw new NullPointerException("position est nulle");
+        }
+        
     }
     
     /**
@@ -56,7 +57,11 @@ public final class OSMNode extends OSMEntity{
          */
         public Builder(long id, PointGeo position){
             super(id);
-            this.position = position;
+            if(position != null){
+                this.position = position;
+            } else{
+                throw new NullPointerException("position est null");
+            }
         }
         
         /**
