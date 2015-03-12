@@ -34,6 +34,10 @@ public abstract class OSMEntity {
         return id;
     }
     
+    public Attributes attributes(){
+        return attributes;
+    }
+    
     /**
      * retourne vrai si et seulement si l'entité possède l'attribut passé en argument.
      * @param key La clef passée en argument
