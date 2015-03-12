@@ -15,10 +15,6 @@ import ch.epfl.imhof.Attributes;
 public final class OSMWay extends OSMEntity{
     
     private List<OSMNode> nodes;
-
-    public OSMWay(long id, Attributes attributes) {
-        super(id, attributes);
-    }
     
     /**
      * construit un chemin étant donnés son identifiant unique, ses nœuds et ses attributs
@@ -33,7 +29,7 @@ public final class OSMWay extends OSMEntity{
         if(nodes.size()<2){
             throw new IllegalArgumentException();
         } else{
-            this.nodes = nodes;
+            this.nodes = Collections.unmodifiableList(nodes);
         }
     }
     
