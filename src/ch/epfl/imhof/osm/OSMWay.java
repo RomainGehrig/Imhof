@@ -13,9 +13,9 @@ import ch.epfl.imhof.Attributes;
  *
  */
 public final class OSMWay extends OSMEntity{
-    
+
     private List<OSMNode> nodes;
-    
+
     /**
      * construit un chemin étant donnés son identifiant unique, ses nœuds et ses attributs
      * @param id L'identifiant unique
@@ -25,14 +25,14 @@ public final class OSMWay extends OSMEntity{
      */
     public OSMWay(long id, List<OSMNode> nodes, Attributes attributes){
         super(id,  attributes);
-        
+
         if(nodes.size()<2){
             throw new IllegalArgumentException();
         } else{
             this.nodes = Collections.unmodifiableList(nodes);
         }
     }
-    
+
     /**
      * retourne le nombre de nœuds du chemin
      * @return le nombre de noeuds du chemin
@@ -40,7 +40,7 @@ public final class OSMWay extends OSMEntity{
     public int nodesCount(){
         return nodes.size();
     }
-    
+
     /**
      * retourne la liste des nœuds du chemin
      * @return la liste des noeuds du chemin
@@ -48,7 +48,7 @@ public final class OSMWay extends OSMEntity{
     public List<OSMNode> nodes(){
         return nodes;
     }
-    
+
     /**
      * retourne la liste des nœuds du chemin sans le dernier si celui-ci est identique au premier
      * @return la liste des noeuds du chemin sans le dernier si celui-ci est identique au premier
@@ -60,7 +60,7 @@ public final class OSMWay extends OSMEntity{
         }
         return Collections.unmodifiableList(n);
     }
-    
+
     /**
      * retourne le premier nœud du chemin
      * @return le premeir noeud du chemin
@@ -68,7 +68,7 @@ public final class OSMWay extends OSMEntity{
     public OSMNode firstNode(){
         return nodes.get(0);
     }
-    
+
     /**
      * retourne le dernier noeud du chemin
      * @return le dernier noeud du chemin
@@ -76,7 +76,7 @@ public final class OSMWay extends OSMEntity{
     public OSMNode lastNode(){
         return nodes.get(nodesCount()-1);
     }
-    
+
     /**
      * retourne vrai si et seulement si le chemin est fermé
      * @return vrai ssi le chemin est fermé, c-à-d que son premier nœud est identique à son dernier nœud
@@ -84,8 +84,8 @@ public final class OSMWay extends OSMEntity{
     public boolean isClosed(){
         return (firstNode() == lastNode());
     }
-    
-    
+
+
     /**
      * sert de bâtisseur à la classe OSMWay et permet de construire un chemin en plusieurs étapes
      * @author Yura Tak (247528)
@@ -93,9 +93,9 @@ public final class OSMWay extends OSMEntity{
      *
      */
     public final static class Builder extends OSMEntity.Builder{
-        
+
         private List<OSMNode> n = new ArrayList<>();
-        
+
         /**
          * construit un bâtisseur pour un chemin ayant l'identifiant donné
          * @param id L'identifiant unique donné
@@ -103,7 +103,7 @@ public final class OSMWay extends OSMEntity{
         public Builder(long id) {
             super(id);
         }
-        
+
         /**
          * ajoute un nœud à (la fin) des nœuds du chemin en cours de construction
          * @param newNode Un nouveau noeud à ajouter à al fin des noeuds
@@ -111,7 +111,7 @@ public final class OSMWay extends OSMEntity{
         public void addNode(OSMNode newNode){
             n.add(newNode);
         }
-        
+
         /**
          * construit et retourne le chemin ayant les nœuds et les attributs ajoutés jusqu'à présent
          * @return le chemin ayant les noeuds et les attributs ajoutés jusqu'à présent
@@ -121,21 +121,21 @@ public final class OSMWay extends OSMEntity{
             if(isIncomplete()){
                 throw new IllegalStateException();
             }
-            
-            return new OSMWay(id, n, attributes.build());
+
+            return new OSMWay(super.id(), n, attributes.build());
         }
-        
+
         /**
          * @inheritDoc
-         * redéfinit la méthode isIncomplete héritée de sa super-classe 
-         * afin qu'un chemin en cours de construction mais possèdant moins de deux nœuds soit également considéré comme incomplet, 
+         * redéfinit la méthode isIncomplete héritée de sa super-classe
+         * afin qu'un chemin en cours de construction mais possèdant moins de deux nœuds soit également considéré comme incomplet,
          * même si la méthode setIncomplete n'a pas été appelée
          */
         public boolean isIncomplete(){
             return (n.size()<2);
-            
+
         }
-        
+
     }
-    
+
 }

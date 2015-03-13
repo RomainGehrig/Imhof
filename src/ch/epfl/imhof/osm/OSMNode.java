@@ -64,7 +64,7 @@ public final class OSMNode extends OSMEntity{
             if(isIncomplete())
                 throw new IllegalStateException("le noeud en cours de construction est incomplet");
 
-            return new OSMNode(id, position, attributes.build());
+            return new OSMNode(super.id(), position, attributes.build());
 
         }
     }
