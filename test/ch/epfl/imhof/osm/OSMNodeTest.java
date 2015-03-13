@@ -55,7 +55,7 @@ public class OSMNodeTest {
     
     @Test(expected = NullPointerException.class)
     public void constructorOSMNodeTest() {
-        n = new OSMNode (0, pt, null);
+        new OSMNode (0, pt, null);
     }
     
     @Test

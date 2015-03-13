@@ -12,16 +12,16 @@ import ch.epfl.imhof.Attributes;
 import ch.epfl.imhof.osm.OSMRelation.Member;
 import ch.epfl.imhof.osm.OSMRelation.Member.Type;
 
-public class OSMRelationTest {
-    
-    private OSMRelation.Builder m = new OSMRelation.Builder(0);
-    private OSMRelation r = newRelation();
-    
-    @Test
-    public void addMemberTest(){
-        OSMRelation r = newRelation();
-        m.addMember(newType(), newRole(),);
-        assertRelation(r, m.get(m.size()-1));
-    }
-
-}
+// public class OSMRelationTest {
+//     
+//     private OSMRelation.Builder m = new OSMRelation.Builder(0);
+//     private OSMRelation r = newRelation();
+//     
+//     @Test
+//     public void addMemberTest(){
+//         OSMRelation r = newRelation();
+//         m.addMember(newType(), newRole(),);
+//         assertRelation(r, m.get(m.size()-1));
+//     }
+// 
+// }

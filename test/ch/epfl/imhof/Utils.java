@@ -26,7 +26,7 @@ public abstract class Utils {
         return p;
     }
     
-    public static void assertPointGeo(PointGeo p1, PointGeo p2){
+    public static void testPointGeo(PointGeo p1, PointGeo p2){
         assertEquals(p1.latitude(), p2.latitude(), 0.00000001);
         assertEquals(p1.longitude(), p2.longitude(), 0.00000001);
     }
@@ -43,10 +43,6 @@ public abstract class Utils {
         map.put("k2", "v2");
         return new Attributes(map);
         }
-    
-    public static assertAttributes(){
-        
-    }
     
     public static OSMNode newNode(){
         return new OSMNode(0, newPointGeo(), newAttributes());

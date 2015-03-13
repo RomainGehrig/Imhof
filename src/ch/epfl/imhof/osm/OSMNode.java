@@ -40,7 +40,6 @@ public final class OSMNode extends OSMEntity{
      */
     public final static class Builder extends OSMEntity.Builder {
 
-        private final long id;
         private final PointGeo position;
         private final Attributes.Builder attributes = new Attributes.Builder();
 
@@ -50,8 +49,8 @@ public final class OSMNode extends OSMEntity{
          * @param position La position donnée
          */
         public Builder(long id, PointGeo position){
-            if (position == null) throw new NullPointerException("Position cannot be null");
             super(id);
+            if (position == null) throw new NullPointerException("Position cannot be null");
             this.position = position;
         }
 
