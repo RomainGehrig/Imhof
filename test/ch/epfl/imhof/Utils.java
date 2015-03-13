@@ -9,8 +9,11 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import ch.epfl.imhof.osm.OSMEntity;
 import ch.epfl.imhof.osm.OSMNode;
+import ch.epfl.imhof.osm.OSMRelation;
 import ch.epfl.imhof.osm.OSMRelation.Member;
+import ch.epfl.imhof.osm.OSMRelation.Member.Type;
 import ch.epfl.imhof.osm.OSMWay;
 
 public abstract class Utils {
@@ -24,8 +27,8 @@ public abstract class Utils {
     }
     
     public static void assertPointGeo(PointGeo p1, PointGeo p2){
-        assertEquals(p1.latitude(), p2.latitude());
-        assertEquals(p1.longitude(), p2.longitude());
+        assertEquals(p1.latitude(), p2.latitude(), 0.00000001);
+        assertEquals(p1.longitude(), p2.longitude(), 0.00000001);
     }
     
     public static long newId(){
@@ -74,18 +77,56 @@ public abstract class Utils {
     }
     
     public static Member newMember(){
+        Type type = null;
+        String role = "";
         
+        int i = (int)(Math.random()*3);
+        switch(i){
+        case 1 : 
+            type = OSMRelation.Member.Type.NODE;
+            break;
+        case 2 :
+            type = OSMRelation.Member.Type.RELATION;
+            break;
+        case 3 :
+            type = OSMRelation.Member.Type.WAY;
+            break;
+        }
+        
+        int j = (int)(Math.random()*2);
+        switch(j){
+        case 1 :
+            role = "in";
+            break;
+        case 2 :
+            role = "out";
+            break;
+        }
+        
+        if(type == OSMRelation.Member.Type.NODE){
+            return new Member(type, role, newNode());
+        } else if(type == OSMRelation.Member.Type.RELATION){
+            return new Member(type, role, newRelation());
+        } else {
+            return new Member(type, role, newWay());
+        }
     }
     
     public static List<Member> newMemberList(){
-        
+        ArrayList<Member> a = new ArrayList<Member>();
+        for(int i = 0; i<10; ++i){
+            a.add(newMember());
+        }
+        return a;
     }
     
     public static OSMRelation newRelation(){
-        
+        return new OSMRelation(newId(), newMemberList(), newAttributes());
     }
     
-    public static assertRelation(){
-        
+    public static void assertRelation(OSMRelation r1, OSMRelation r2){
+        assertEquals(r1.id(), r2.id());
+        assertEquals(r1.members(), r2.members());
+        assertEquals(r1.attributes(), r2.attributes());
     }   
 }
