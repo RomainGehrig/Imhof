@@ -76,10 +76,8 @@ public abstract class Utils {
         }
     }
     
-    public static Member newMember(){
+    public static Type newType(){
         Type type = null;
-        String role = "";
-        
         int i = (int)(Math.random()*3);
         switch(i){
         case 1 : 
@@ -92,6 +90,11 @@ public abstract class Utils {
             type = OSMRelation.Member.Type.WAY;
             break;
         }
+        return type;
+    }
+    
+    public static String newRole(){
+        String role = "";
         
         int j = (int)(Math.random()*2);
         switch(j){
@@ -102,6 +105,14 @@ public abstract class Utils {
             role = "out";
             break;
         }
+        
+        return role;
+    }
+    
+    public static Member newMember(){
+        
+        Type type = newType();
+        String role = newRole();
         
         if(type == OSMRelation.Member.Type.NODE){
             return new Member(type, role, newNode());
