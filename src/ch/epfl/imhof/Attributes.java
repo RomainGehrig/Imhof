@@ -23,6 +23,14 @@ public final class Attributes {
     }
     
     /**
+     * Retourne la taille de la map des attributs
+     * @return la taille
+     */
+    public int size(){
+        return attributes.size();
+    }
+    
+    /**
      * Retourne vrai si et seulement si l'ensemble d'attributs est vide
      * @return Vrai si vide, faux sinon
      */

@@ -16,6 +16,7 @@ public abstract class OSMEntity {
      * construit une entité OSM dotée de l'identifiant unique et des attributs donnés
      * @param id L'identifiant unique
      * @param attributes Attributs donnés
+     * @throws NullPointerException si attributes est vide
      */
     public OSMEntity(long id, Attributes attributes){
         if (attributes == null)
@@ -33,6 +34,13 @@ public abstract class OSMEntity {
         return id;
     }
 
+=======
+    
+    public Attributes attributes(){
+        return attributes;
+    }
+    
+>>>>>>> 1e9fa05978746f73734ab25a4397d9774b6c7016
     /**
      * retourne vrai si et seulement si l'entité possède l'attribut passé en argument.
      * @param key La clef passée en argument
