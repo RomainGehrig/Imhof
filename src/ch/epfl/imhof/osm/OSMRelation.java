@@ -99,8 +99,6 @@ public final class OSMRelation extends OSMEntity {
         }
     }
 
-
-
     /**
      * sert de bâtisseur à la classe OSMRelation et permet de construire une relation en plusieurs étapes
      * @author Yura Tak (247528)
