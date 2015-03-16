@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public final class Attributes {
     private Map<String, String> attributes;
-    
+
     /**
      * Construit un ensemble d'attributs avec les paires clef/valeur présentes dans la table associative donnée
      * @param attributes Map des clefs/valeurs
@@ -21,7 +21,7 @@ public final class Attributes {
     public Attributes(Map<String, String> attributes){
         this.attributes = Collections.unmodifiableMap(new HashMap<String, String>(attributes));
     }
-    
+
     /**
      * Retourne la taille de la map des attributs
      * @return la taille
@@ -29,7 +29,7 @@ public final class Attributes {
     public int size(){
         return attributes.size();
     }
-    
+
     /**
      * Retourne vrai si et seulement si l'ensemble d'attributs est vide
      * @return Vrai si vide, faux sinon
@@ -37,7 +37,7 @@ public final class Attributes {
     public boolean isEmpty(){
         return attributes.isEmpty();
     }
-    
+
     /**
      * Retourne vrai si l'ensemble d'attributs contient la clef donnée
      * @param key Clef à vérifier
@@ -46,7 +46,7 @@ public final class Attributes {
     public boolean contains(String key){
         return attributes.containsKey(key);
     }
-    
+
     /**
      * Retourne la valeur associée à la clef donnée, ou null si la clef n'existe pas
      * @param key Clef dont on veut la valeur associée
@@ -55,7 +55,7 @@ public final class Attributes {
     public String get(String key){
         return attributes.get(key);
     }
-    
+
     /**
      * Retourne la valeur associée à la clef donnée, ou la valeur par défaut donnée si aucune valeur ne lui est associée
      * @param key Nom de l'attribut
@@ -69,9 +69,9 @@ public final class Attributes {
             return defaultvalue;
         }
     }
-    
+
     /**
-     * Retourne l'entier associé à la clef donnée, ou la valeur par défaut donnée 
+     * Retourne l'entier associé à la clef donnée, ou la valeur par défaut donnée
      * si aucune valeur ne lui est associée, ou si cette valeur n'est pas un entier valide
      * @param key Nom de l'attribut à convertir
      * @param defaultvalue Valeur par défaut au cas où l'attribut n'est pas convertible
@@ -85,7 +85,7 @@ public final class Attributes {
             return defaultvalue;
         }
     }
-    
+
     /**
      * Retourne une version filtrée des attributs ne contenant que ceux dont le nom figure dans l'ensemble passé
      * @param keysToKeep Set des clefs à garder
@@ -100,7 +100,7 @@ public final class Attributes {
         }
         return new Attributes(tmp);
     }
-    
+
     /**
      * Sert de bâtisseur à la classe Attributes
      * @author Yura Tak(247528)
@@ -109,7 +109,7 @@ public final class Attributes {
      */
     public final static class Builder{
         private Map<String, String> attributes = new HashMap<>();
-        
+
         /**
          * Ajoute l'association (clef, valeur) donnée à l'ensemble d'attributs en cours de construction
          * Si un attribut de même nom avait déjà été ajouté précédemment à l'ensemble, sa valeur est remplacée par celle donnée
@@ -119,7 +119,7 @@ public final class Attributes {
         public void put(String key, String value){
             attributes.put(key, value);
         }
-        
+
         /**
          * Construit un ensemble d'attributs contenant les associations clef/valeur ajoutées jusqu'à présent
          * @return L'objet Attributes construit
@@ -128,5 +128,5 @@ public final class Attributes {
             return (new Attributes(attributes));
         }
     }
-    
+
 }
