@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -30,8 +31,8 @@ public final class OSMMap {
         private final Map<Long, OSMRelation> relations;
         
         public Builder() {
-            nodes = new LinkedHashMap<>();
-            ways = new LinkedHashMap<>();
+            nodes = new HashMap<>(); // LinkedHashMap? Si l'ordre d'insertion compte
+            ways = new HashMap<>();
             relations = new LinkedHashMap<>();
         }
         public void addNode(OSMNode newNode) {
