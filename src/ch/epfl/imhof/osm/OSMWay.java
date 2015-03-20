@@ -28,7 +28,7 @@ public final class OSMWay extends OSMEntity{
 
         if(nodes.size()<2){
             throw new IllegalArgumentException();
-        } else{
+        } else {
             this.nodes = Collections.unmodifiableList(nodes);
         }
     }
@@ -132,7 +132,7 @@ public final class OSMWay extends OSMEntity{
          * même si la méthode setIncomplete n'a pas été appelée
          */
         public boolean isIncomplete(){
-            return (n.size()<2);
+            return super.isIncomplete() || (n.size()<2);
 
         }
 

@@ -98,7 +98,7 @@ public abstract class OSMEntity {
         }
 
         /**
-         * retourne vrai si et seulement si l'entité en cours de construction est incomplète, 
+         * retourne vrai si et seulement si l'entité en cours de construction est incomplète,
          * c-à-d si la méthode setIncomplete a été appelée au moins une fois sur ce bâtisseur depuis sa création.
          * @return
          */
