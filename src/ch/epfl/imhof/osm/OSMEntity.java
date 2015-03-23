@@ -105,6 +105,5 @@ public abstract class OSMEntity {
         public boolean isIncomplete(){
             return isIncomplete;
         }
-
     }
 }

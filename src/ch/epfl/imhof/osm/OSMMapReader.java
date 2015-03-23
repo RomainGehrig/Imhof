@@ -18,12 +18,34 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import ch.epfl.imhof.PointGeo;
 
+/**
+ * permet de construire une carte OpenStreetMap à partir de données stockées dans un fichier au format OSM
+ * @author Yura Tak (247528)
+ * @author Romain Gehrig (223316)
+ *
+ */
 public final class OSMMapReader {
+
+    /**
+     * constructeur par défaut privé et vide qui rend la classe non instanciable
+     */
     private OSMMapReader() {}
 
+    /**
+     * lit la carte OSM contenue dans le fichier de nom donné,
+     * en le décompressant avec gzip si et seulement si le second argument est vrai
+     * @param fileName Contient la carte OSM
+     * @param unGZip
+     * @return l'OSMMap
+     * @throws SAXException en cas d'erreur dans le format du fichier XML contenant la carte
+     * @throws IOException en cas d'autre erreur d'entrée/sortie, p.ex. si le fichier n'existe pas
+     */
     public static OSMMap readOSMFile(String fileName, boolean unGZip) throws SAXException, IOException {
         InputStream file = new FileInputStream(fileName);
-        if (unGZip) { file = new GZIPInputStream(file); }
+        if (unGZip) {
+            file = new GZIPInputStream(file);
+        }
+
         XMLReader r = XMLReaderFactory.createXMLReader();
         OSMMap.Builder mapBuilder = new OSMMap.Builder();
 
@@ -36,11 +58,11 @@ public final class OSMMapReader {
 
         Deque<OSMEntity.Builder> elements = new ArrayDeque<>();
         OSMMap.Builder mapBuilder;
-        
+
         public OSMHandler(OSMMap.Builder builder) {
             mapBuilder = builder;
         }
-        
+
         @Override
         public void startElement(String uri,
                                  String lName,
@@ -65,12 +87,12 @@ public final class OSMMapReader {
                         ((OSMWay.Builder) elements.peek()).addNode(mapBuilder.nodeForId(Long.parseLong(atts.getValue("id"))));
                     } catch (ClassCastException e) {
                         throw new SAXException("Invalid use of nd");
-                    } 
+                    }
                     break;
                 case "tag": // OSMEntity
                     elements.peek().setAttribute(atts.getValue("k"), atts.getValue("v"));
                     break;
-                case "relation": // 
+                case "relation": //
                     idd = Long.parseLong(atts.getValue("id"));
                     elements.push(new OSMRelation.Builder(idd));
                     break;
@@ -93,7 +115,7 @@ public final class OSMMapReader {
                             case NODE:
                                 member = mapBuilder.nodeForId(iddd);
                                 break;
-                            case RELATION: 
+                            case RELATION:
                                 member = mapBuilder.relationForId(iddd);
                                 break;
                             default:
@@ -101,7 +123,7 @@ public final class OSMMapReader {
                                 break;
                         }
                         String role = atts.getValue("role");
-                        
+
                         ((OSMRelation.Builder) elements.peek()).addMember(t,role,member);
                     } catch (ClassCastException e) {
                         throw new SAXException("Invalid use of member");
@@ -124,7 +146,7 @@ public final class OSMMapReader {
                     mapBuilder.addWay((OSMWay) (((OSMWay.Builder) elements.pop()).build()));
                     break;
 
-                case "relation": 
+                case "relation":
                     mapBuilder.addRelation((OSMRelation) (((OSMRelation.Builder) elements.pop()).build()));
                     break;
                 }
