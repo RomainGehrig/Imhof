@@ -109,7 +109,6 @@ public final class OSMRelation extends OSMEntity {
 
         private OSMRelation relation;
         private List<Member> m;
-        private Attributes attributes;
 
         /**
          * construit un bâtisseur pour une relation ayant l'identifiant donné
@@ -141,7 +140,7 @@ public final class OSMRelation extends OSMEntity {
             if(isIncomplete()){
                 throw new IllegalStateException();
             }
-            relation = new OSMRelation(super.id(), m, attributes);
+            relation = new OSMRelation(super.id(), m, attributes.build());
             return relation;
         }
 

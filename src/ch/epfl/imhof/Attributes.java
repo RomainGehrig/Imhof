@@ -12,7 +12,7 @@ import java.util.Set;
  *
  */
 public final class Attributes {
-    private Map<String, String> attributes;
+    private final Map<String, String> attributes;
 
     /**
      * Construit un ensemble d'attributs avec les paires clef/valeur présentes dans la table associative donnée

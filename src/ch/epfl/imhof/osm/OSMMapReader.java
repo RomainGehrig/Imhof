@@ -84,7 +84,7 @@ public final class OSMMapReader {
                     break;
                 case "nd": // In OSMWay
                     try {
-                        ((OSMWay.Builder) elements.peek()).addNode(mapBuilder.nodeForId(Long.parseLong(atts.getValue("id"))));
+                        ((OSMWay.Builder) elements.peek()).addNode(mapBuilder.nodeForId(Long.parseLong(atts.getValue("ref"))));
                     } catch (ClassCastException e) {
                         throw new SAXException("Invalid use of nd");
                     }
@@ -97,33 +97,32 @@ public final class OSMMapReader {
                     elements.push(new OSMRelation.Builder(idd));
                     break;
                 case "member": // in a relation
-                    try {
-                        OSMRelation.Member.Type t;
-                        switch (atts.getValue("type")) {
-                            case "way": t = OSMRelation.Member.Type.WAY;
-                            case "node": t = OSMRelation.Member.Type.NODE;
-                            case "relation": t = OSMRelation.Member.Type.RELATION;
-                            default: t = null; // will be catched later
-                        }
+                    OSMRelation.Member.Type t;
+                    switch (atts.getValue("type")) {
+                        case "way": t = OSMRelation.Member.Type.WAY;
+                        case "node": t = OSMRelation.Member.Type.NODE;
+                        case "relation": t = OSMRelation.Member.Type.RELATION;
+                        default: t = null; // will be handled later
+                    }
 
-                        OSMEntity member;
-                        Long iddd = Long.parseLong(atts.getValue("id"));
+                    OSMEntity member = null;
+                    Long iddd = Long.parseLong(atts.getValue("ref"));
+                    if (t != null) {
                         switch (t) {
-                            case WAY:
-                                member = mapBuilder.wayForId(iddd);
-                                break;
-                            case NODE:
-                                member = mapBuilder.nodeForId(iddd);
-                                break;
-                            case RELATION:
-                                member = mapBuilder.relationForId(iddd);
-                                break;
-                            default:
-                                member = null;
-                                break;
+                        case WAY:
+                            member = mapBuilder.wayForId(iddd);
+                            break;
+                        case NODE:
+                            member = mapBuilder.nodeForId(iddd);
+                            break;
+                        case RELATION:
+                            member = mapBuilder.relationForId(iddd);
+                            break;
                         }
-                        String role = atts.getValue("role");
+                    }
+                    String role = atts.getValue("role");
 
+                    try {
                         ((OSMRelation.Builder) elements.peek()).addMember(t,role,member);
                     } catch (ClassCastException e) {
                         throw new SAXException("Invalid use of member");
