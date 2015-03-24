@@ -12,7 +12,7 @@ public class OSMMapReaderTest {
 
     @Test
     public void bcTest() throws SAXException,IOException {
-        String fileName = getClass().getResource("bc.osm").getFile();
+        String fileName = getClass().getClassLoader().getResource("bc.osm").getFile();
         OSMMap map = OSMMapReader.readOSMFile(fileName, false);
     }
 }
