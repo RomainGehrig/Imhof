@@ -12,5 +12,7 @@ javaSource in Test := baseDirectory.value / "test"
 
 resourceDirectory := baseDirectory.value / "data"
 
+unmanagedResourceDirectories in Test += baseDirectory.value / "data"
+
 libraryDependencies += "com.novocode" % "junit-interface" % "0.8" % "test->default"
 

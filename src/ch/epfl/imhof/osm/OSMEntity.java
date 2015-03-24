@@ -20,7 +20,7 @@ public abstract class OSMEntity {
      */
     public OSMEntity(long id, Attributes attributes){
         if (attributes == null)
-            throw new NullPointerException("Attributes cannot be null.");
+            throw new NullPointerException("Attributes is a null pointer.");
 
         this.id = id;
         this.attributes = attributes;
