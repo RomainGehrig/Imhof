@@ -1,4 +1,3 @@
-
 package ch.epfl.imhof.geometry;
 
 import java.util.List;
@@ -21,21 +20,21 @@ public final class ClosedPolyLine extends PolyLine {
     public boolean isClosed() {
         return true;
     }
-    
+
     /**
      * Retourne l'aire de la polyligne (toujours positive)
      * @return l'aire
      */
     public double area(){
         double area = 0;
-        for(int i = 0; i < points.size(); ++i){
+        for(int i = 0; i < points().size(); ++i){
             area += getPoint(i).x()*(getPoint(i+1).y() - getPoint(i-1).y());
         }
-        
+
         if(area<0){
             area = -area;
         }
-        
+
         return (area/2);
     }
 
@@ -45,7 +44,7 @@ public final class ClosedPolyLine extends PolyLine {
      * @return sommet se trouvant à cet endroit
      */
     private Point getPoint(int n) {
-        return points.get(Math.floorMod(n, points.size()));
+        return points().get(Math.floorMod(n, points().size()));
     }
 
     /**
@@ -74,18 +73,18 @@ public final class ClosedPolyLine extends PolyLine {
      */
     public boolean containsPoint(Point p){
         int indice = 0;
-        for(int i = 0; i<points.size(); ++i){
+        for(int i = 0; i<points().size(); ++i){
             Point p1 = getPoint(i);
             Point p2 = getPoint(i+1);
-            
+
             if(p1.y() <= p.y()){
                 if(p2.y() > p.y() && isLeft(p, p1, p2)){
                     ++indice;
-                }  
+                }
             } else {
                 if(p2.y() <= p.y() && isLeft(p, p2, p1)){
                     --indice;
-                }   
+                }
             }
         }
         return (indice != 0);

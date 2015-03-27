@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  */
 public abstract class PolyLine {
-    protected final List<Point> points;
+    private final List<Point> points;
 
     /**
      * Retourne vrai si et seulement si la polyligne est fermée

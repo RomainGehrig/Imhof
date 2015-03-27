@@ -61,35 +61,37 @@ public final class OSMToGeoTransformer {
      * @param map
      * @return
      */
-    public Map transform(OSMMap map){
+    public Map transform(OSMMap map) {
         PolyLine.Builder polyLineBuilder = new PolyLine.Builder();
 
-        for(OSMWay w : map.ways()){
-            for(OSMNode n : w.nodes()){
+        for (OSMWay w : map.ways()) {
+            for (OSMNode n : w.nodes()) {
                 polyLineBuilder.addPoint(projection.project(n.position()));
             }
+
             String areaValue = w.attributeValue("area");
             boolean isArea = AREA_VALUE.contains(areaValue);
-            if(isArea || !w.attributes().keepOnlyKeys(AREA_ATTRIBUTS).isEmpty()){
+
+            if (isArea || !w.attributes().keepOnlyKeys(AREA_ATTRIBUTS).isEmpty()) {
                 Attributes att = w.attributes().keepOnlyKeys(FILTRE_POLYGON);
-                if(att.size() > 0){
+
+                if (att.size() > 0){
                     builder.addPolygon(new Attributed<Polygon>(new Polygon(polyLineBuilder.buildClosed()), att));
                 }
 
-            } else{
+            } else {
                 Attributes att = w.attributes().keepOnlyKeys(FILTRE_POLYLINE);
-                if(att.size() > 0){
+                if (att.size() > 0) {
                     builder.addPolyLine(new Attributed<PolyLine>(polyLineBuilder.buildOpen(), att));
                 }
             }
         }
 
-        for(OSMRelation r : map.relations()){
-            String multipolygon = r.attributeValue("type");
-            boolean isMultipolygon = true; /*= multipolygon.equals(OSMRelation.Member.Type.MULTIPOLYGON)*/   //TODO : ROMAIN SOS!!!
-            if(isMultipolygon || !r.attributes().keepOnlyKeys(AREA_ATTRIBUTS).isEmpty()){
+        for (OSMRelation r : map.relations()) {
+            boolean isMultipolygon = r.attributeValue("type") == null ? false : r.attributeValue("type").equals("multipolygon");
+            if (isMultipolygon || !r.attributes().keepOnlyKeys(AREA_ATTRIBUTS).isEmpty()) {
                 Attributes att = r.attributes().keepOnlyKeys(FILTRE_POLYGON);
-                if(att.size() > 0){
+                if (att.size() > 0) {
                     builder.addPolygon(new Attributed<Polygon>(new Polygon(polyLineBuilder.buildClosed()), att));
                 }
             }

@@ -97,18 +97,18 @@ public final class OSMMapReader {
                     elements.push(new OSMRelation.Builder(idd));
                     break;
                 case "member": // in a relation
-                    OSMRelation.Member.Type t;
+                    OSMRelation.Member.Type type;
                     switch (atts.getValue("type")) {
-                        case "way": t = OSMRelation.Member.Type.WAY;
-                        case "node": t = OSMRelation.Member.Type.NODE;
-                        case "relation": t = OSMRelation.Member.Type.RELATION;
-                        default: t = null; // will be handled later
+                        case "way": type = OSMRelation.Member.Type.WAY;
+                        case "node": type = OSMRelation.Member.Type.NODE;
+                        case "relation": type = OSMRelation.Member.Type.RELATION;
+                        default: type = null; // will be handled later
                     }
 
                     OSMEntity member = null;
                     Long iddd = Long.parseLong(atts.getValue("ref"));
-                    if (t != null) {
-                        switch (t) {
+                    if (type != null) {
+                        switch (type) {
                         case WAY:
                             member = mapBuilder.wayForId(iddd);
                             break;
@@ -123,7 +123,7 @@ public final class OSMMapReader {
                     String role = atts.getValue("role");
 
                     try {
-                        ((OSMRelation.Builder) elements.peek()).addMember(t,role,member);
+                        ((OSMRelation.Builder) elements.peek()).addMember(type,role,member);
                     } catch (ClassCastException e) {
                         throw new SAXException("Invalid use of member");
                     }

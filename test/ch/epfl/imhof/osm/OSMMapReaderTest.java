@@ -10,9 +10,9 @@ import java.io.IOException;
 
 public class OSMMapReaderTest {
 
-    private final boolean RUN_BIG_TESTS = true;
+    private final static boolean RUN_BIG_TESTS = false;
 
-    public void printMap(OSMMap m) {
+    public static void printMap(OSMMap m) {
         System.out.println(m.ways().size() + " ways.");
         System.out.println(m.relations().size() + " relations.");
     }
@@ -22,39 +22,42 @@ public class OSMMapReaderTest {
         // String fileName = getClass().getClassLoader().getResource("bc.osm").getFile();
         // OSMMap map = OSMMapReader.readOSMFile(fileName, false);
 
-        testBigData("bc",false);
+        testMapReader("bc",false);
     }
 
     @Test
     public void learningcenterTest() throws SAXException,IOException {
         // String fileName = getClass().getClassLoader().getResource("lc.osm").getFile();
         // OSMMap map = OSMMapReader.readOSMFile(fileName, false);
-        testBigData("lc",false);
+        testMapReader("lc",false);
     }
 
     @Test
     public void lausanneTest() throws SAXException,IOException {
-        testBigData("lausanne", true);
+        if (!RUN_BIG_TESTS) return;
+        testMapReader("lausanne", true);
     }
 
     @Test
     public void interlakenTest() throws SAXException,IOException {
-        testBigData("interlaken", true);
+        if (!RUN_BIG_TESTS) return;
+        testMapReader("interlaken", true);
     }
 
     @Test
     public void berneTest() throws SAXException,IOException {
-        testBigData("berne", true);
+        if (!RUN_BIG_TESTS) return;
+        testMapReader("berne", true);
     }
 
-    public void testBigData(String cityname, boolean gz) throws SAXException,IOException {
-        if (!RUN_BIG_TESTS) return;
-
+    public OSMMap testMapReader(String cityname, boolean gz) throws SAXException,IOException {
         long start = System.currentTimeMillis();
         String fileName = getClass().getClassLoader().getResource(cityname + ".osm" + (gz ? ".gz" : "")).getFile();
         OSMMap map = OSMMapReader.readOSMFile(fileName, gz);
         long end = System.currentTimeMillis();
         System.out.println(cityname + " took " + ((end - start)/1000d) + "sec to complete.");
         printMap(map);
+
+        return map;
     }
 }

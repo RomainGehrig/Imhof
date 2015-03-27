@@ -85,7 +85,6 @@ public final class OSMWay extends OSMEntity{
         return (firstNode() == lastNode());
     }
 
-
     /**
      * sert de bâtisseur à la classe OSMWay et permet de construire un chemin en plusieurs étapes
      * @author Yura Tak (247528)
@@ -109,6 +108,8 @@ public final class OSMWay extends OSMEntity{
          * @param newNode Un nouveau noeud à ajouter à al fin des noeuds
          */
         public void addNode(OSMNode newNode){
+            if (newNode == null) return;
+
             n.add(newNode);
         }
 
