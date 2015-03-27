@@ -16,3 +16,4 @@ unmanagedResourceDirectories in Test += baseDirectory.value / "data"
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.8" % "test->default"
 
+com.etsy.sbt.Checkstyle.checkstyleSettings

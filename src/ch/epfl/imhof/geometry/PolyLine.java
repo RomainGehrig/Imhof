@@ -1,4 +1,3 @@
-
 package ch.epfl.imhof.geometry;
 
 import java.util.Collections;
@@ -16,7 +15,7 @@ public abstract class PolyLine {
 
     /**
      * Retourne vrai si et seulement si la polyligne est fermée
-     * @return boolean 
+     * @return boolean
      */
     public abstract boolean isClosed();
 
@@ -49,9 +48,9 @@ public abstract class PolyLine {
     public List<Point> points() {
         return points;
     }
-    
+
     /**
-     * Sert de bâtisseur aux deux sous-classes de PolyLine 
+     * Sert de bâtisseur aux deux sous-classes de PolyLine
      * et permet de construire une polyligne en plusieurs étapes
      * @author Yura Tak (247528)
      * @author Romain Gehrig (223316)
@@ -59,7 +58,7 @@ public abstract class PolyLine {
      */
     public final static class Builder{
         List<Point> p = new ArrayList<Point>();
-        
+
         /**
          * Ajoute le point donné à la fin de la liste des sommets de la polyligne en cours de construction
          * @param newPoint Sommet à ajouter
@@ -67,7 +66,7 @@ public abstract class PolyLine {
         public void addPoint(Point newPoint){
             p.add(newPoint);
         }
-        
+
         /**
          * Construit et retourne une polyligne ouverte avec les points ajoutés jusqu'à présent
          * @return polyligne ouverte
@@ -75,7 +74,7 @@ public abstract class PolyLine {
         public OpenPolyLine buildOpen(){
             return new OpenPolyLine(p);
         }
-        
+
         /**
          * Construit et retourne une polyligne fermée avec les points ajoutés jusqu'à présent
          * @return polyligne fermée

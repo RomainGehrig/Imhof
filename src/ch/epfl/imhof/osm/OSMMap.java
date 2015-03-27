@@ -1,4 +1,3 @@
-
 package ch.epfl.imhof.osm;
 
 import java.util.List;
@@ -16,10 +15,10 @@ import java.util.Collections;
  *
  */
 public final class OSMMap {
-    
+
     private final List<OSMWay> ways;
     private final List<OSMRelation> relations;
-    
+
     /**
      * construit une carte OSM avec les chemins et les relations donnés
      * @param ways Les chemins donnés
@@ -29,7 +28,7 @@ public final class OSMMap {
         this.ways = Collections.unmodifiableList(new ArrayList(ways));
         this.relations = Collections.unmodifiableList(new ArrayList(relations));
     }
-    
+
     /**
      * retourne la liste des chemins de la carte
      * @return la liste des chemins de la carte

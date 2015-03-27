@@ -8,3 +8,5 @@ docs/
 .project
 .classpath
 data/
+lib/
+checkstyle-config.xml

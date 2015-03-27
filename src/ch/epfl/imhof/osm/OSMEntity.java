@@ -9,7 +9,7 @@ import ch.epfl.imhof.Attributes;
  *
  */
 public abstract class OSMEntity {
-    protected long id;
+    private long id;
     private Attributes attributes;
 
     /**
