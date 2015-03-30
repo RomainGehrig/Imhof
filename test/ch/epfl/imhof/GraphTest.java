@@ -49,6 +49,12 @@ public class GraphTest {
     }
 
     @Test
+    public void constructorTest() {
+        HashMap<Integer, Set<Integer>> adjacencyList = createAdjacencyList();
+        Graph g = new Graph<>(adjacencyList);
+    }
+
+    @Test
     public void nodesComplete() {
 
         HashMap<Integer, Set<Integer>> adjacencyList = createAdjacencyList();
