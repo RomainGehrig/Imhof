@@ -9,8 +9,8 @@ import ch.epfl.imhof.Attributes;
  *
  */
 public abstract class OSMEntity {
-    private long id;
-    private Attributes attributes;
+    private final long id;
+    private final Attributes attributes;
 
     /**
      * construit une entité OSM dotée de l'identifiant unique et des attributs donnés
@@ -20,7 +20,7 @@ public abstract class OSMEntity {
      */
     public OSMEntity(long id, Attributes attributes){
         if (attributes == null)
-            throw new NullPointerException("Attributes is a null pointer.");
+            throw new NullPointerException("Attributes ne peut pas être null");
 
         this.id = id;
         this.attributes = attributes;
@@ -65,8 +65,8 @@ public abstract class OSMEntity {
     public static class Builder{
 
         private long id;
-        protected Attributes.Builder attributes = new Attributes.Builder();
         private boolean isIncomplete = false;
+        protected Attributes.Builder attributes = new Attributes.Builder();
 
         /**
          * construit un bâtisseur pour une entité OSM identifiée par l'entier donné

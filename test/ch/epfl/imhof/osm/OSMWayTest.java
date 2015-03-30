@@ -30,14 +30,14 @@ public class OSMWayTest extends OSMEntityTest{
         return new OSMWay.Builder(1);
     }
 
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void constructorLessThanTwoNodes() {
         ArrayList<OSMNode> testWayList = new ArrayList<>();
         testWayList.add(TEST_NODE_1);
         new OSMWay(4, testWayList, EMPTY_ATTRIBUTES);
     }
-    
+
     @Test
     public void constructorNodeListNonMutable() {
         ArrayList<OSMNode> testWayList = new ArrayList<>();

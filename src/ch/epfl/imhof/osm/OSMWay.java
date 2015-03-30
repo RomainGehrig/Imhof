@@ -14,7 +14,7 @@ import ch.epfl.imhof.Attributes;
  */
 public final class OSMWay extends OSMEntity{
 
-    private List<OSMNode> nodes;
+    private final List<OSMNode> nodes;
 
     /**
      * construit un chemin étant donnés son identifiant unique, ses nœuds et ses attributs
@@ -23,21 +23,20 @@ public final class OSMWay extends OSMEntity{
      * @param attributes Les attributs
      * @throws IllegalArgumentException si la liste de nœuds possède moins de deux éléments
      */
-    public OSMWay(long id, List<OSMNode> nodes, Attributes attributes){
-        super(id,  attributes);
+    public OSMWay(long id, List<OSMNode> nodes, Attributes attributes) {
+        super(id, attributes);
 
-        if(nodes.size()<2){
-            throw new IllegalArgumentException();
-        } else {
-            this.nodes = Collections.unmodifiableList(nodes);
-        }
+        if (nodes.size() < 2)
+            throw new IllegalArgumentException("Il faut au moins 2 noeuds pour contruire une OSMWay.");
+
+        this.nodes = Collections.unmodifiableList(new ArrayList<>(nodes));
     }
 
     /**
      * retourne le nombre de nœuds du chemin
      * @return le nombre de noeuds du chemin
      */
-    public int nodesCount(){
+    public int nodesCount() {
         return nodes.size();
     }
 
@@ -45,7 +44,7 @@ public final class OSMWay extends OSMEntity{
      * retourne la liste des nœuds du chemin
      * @return la liste des noeuds du chemin
      */
-    public List<OSMNode> nodes(){
+    public List<OSMNode> nodes() {
         return nodes;
     }
 
@@ -53,12 +52,9 @@ public final class OSMWay extends OSMEntity{
      * retourne la liste des nœuds du chemin sans le dernier si celui-ci est identique au premier
      * @return la liste des noeuds du chemin sans le dernier si celui-ci est identique au premier
      */
-    public List<OSMNode> nonRepeatingNodes(){
-        List<OSMNode> n = new ArrayList<>(nodes);
-        if(isClosed()){
-            n.remove(lastNode());
-        }
-        return Collections.unmodifiableList(n);
+    public List<OSMNode> nonRepeatingNodes() {
+        // Note: nodes est garanti de posséder au moins 2 noeuds
+        return Collections.unmodifiableList(new ArrayList<>(nodes.subList(0, nodes.size() + (isClosed() ? -1 : 0))));
     }
 
     /**
@@ -91,9 +87,9 @@ public final class OSMWay extends OSMEntity{
      * @author Romain Gehrig (223316)
      *
      */
-    public final static class Builder extends OSMEntity.Builder{
+    public final static class Builder extends OSMEntity.Builder {
 
-        private List<OSMNode> n = new ArrayList<>();
+        private List<OSMNode> nodes = new ArrayList<>();
 
         /**
          * construit un bâtisseur pour un chemin ayant l'identifiant donné
@@ -108,9 +104,7 @@ public final class OSMWay extends OSMEntity{
          * @param newNode Un nouveau noeud à ajouter à al fin des noeuds
          */
         public void addNode(OSMNode newNode){
-            if (newNode == null) return;
-
-            n.add(newNode);
+            nodes.add(newNode);
         }
 
         /**
@@ -118,12 +112,11 @@ public final class OSMWay extends OSMEntity{
          * @return le chemin ayant les noeuds et les attributs ajoutés jusqu'à présent
          * @throws IllegalStateException si le chemin en cours de construction est incomplet
          */
-        public OSMWay build(){
-            if(isIncomplete()){
-                throw new IllegalStateException();
-            }
+        public OSMWay build() {
+            if(isIncomplete())
+                throw new IllegalStateException("OSMWay incomplète: ne peut pas build");
 
-            return new OSMWay(super.id(), n, attributes.build());
+            return new OSMWay(super.id(), nodes, attributes.build());
         }
 
         /**
@@ -132,11 +125,8 @@ public final class OSMWay extends OSMEntity{
          * afin qu'un chemin en cours de construction mais possèdant moins de deux nœuds soit également considéré comme incomplet,
          * même si la méthode setIncomplete n'a pas été appelée
          */
-        public boolean isIncomplete(){
-            return super.isIncomplete() || (n.size()<2);
-
+        public boolean isIncomplete() {
+            return super.isIncomplete() || (nodes.size() < 2);
         }
-
     }
-
 }

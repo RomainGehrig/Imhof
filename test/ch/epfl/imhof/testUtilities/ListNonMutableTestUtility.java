@@ -10,8 +10,6 @@ public class ListNonMutableTestUtility {
         } else {
             argumentInitialList.add(null);
             return fieldInsideList.isEmpty();
-            
         }
     }
-
 }
