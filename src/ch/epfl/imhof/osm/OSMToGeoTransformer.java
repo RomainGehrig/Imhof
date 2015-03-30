@@ -30,7 +30,7 @@ import ch.epfl.imhof.projection.CH1903Projection;
 public final class OSMToGeoTransformer {
 
     private final Projection projection;
-    private final Map.Builder builder = new Map.Builder();
+    private final Map.Builder builder;
 
     private final static Set<String> AREA_VALUE = new HashSet<>(Arrays.asList("yes", "1", "true"));
     private final static Set<String> AREA_ATTRIBUTS = new HashSet<>(Arrays.asList(
@@ -54,6 +54,7 @@ public final class OSMToGeoTransformer {
      */
     public OSMToGeoTransformer(Projection projection){
         this.projection = projection;
+        this.builder = new Map.Builder();
     }
 
     /**
@@ -62,9 +63,10 @@ public final class OSMToGeoTransformer {
      * @return
      */
     public Map transform(OSMMap map) {
-        PolyLine.Builder polyLineBuilder = new PolyLine.Builder();
+        PolyLine.Builder polyLineBuilder;
 
         for (OSMWay w : map.ways()) {
+            polyLineBuilder = new PolyLine.Builder();
             for (OSMNode n : w.nodes()) {
                 polyLineBuilder.addPoint(projection.project(n.position()));
             }
@@ -92,7 +94,8 @@ public final class OSMToGeoTransformer {
             if (isMultipolygon || !r.attributes().keepOnlyKeys(AREA_ATTRIBUTS).isEmpty()) {
                 Attributes att = r.attributes().keepOnlyKeys(FILTRE_POLYGON);
                 if (att.size() > 0) {
-                    builder.addPolygon(new Attributed<Polygon>(new Polygon(polyLineBuilder.buildClosed()), att));
+                    for (Attributed<Polygon> p : assemblePolygon(r, r.attributes()))
+                        builder.addPolygon(p);
                 }
             }
         }

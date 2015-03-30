@@ -2,39 +2,63 @@ package ch.epfl.imhof;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
+import java.util.HashMap;
+
 import org.junit.Test;
 
-import ch.epfl.imhof.geometry.Polygon;
+import ch.epfl.imhof.Attributed;
+import ch.epfl.imhof.Attributes;
 
 public class AttributedTest {
 
-    Attributed<Polygon> ap;
+	private Attributes newSampleAttributes() {
+		HashMap<String, String> testData = new HashMap<>();
+		testData.put("testKey 1", "testValue 1");
+		testData.put("testKey 2", "testValue 2");
+		testData.put("testKey 3", "testValue 3");
+		testData.put("testKey 4", "23");
+		return new Attributes(testData);
+	}
 
-    @Before
-    public void test() {
-        Attributes.Builder b = new Attributes.Builder();
-        b.put("natural", "water");
-        b.put("name", "Lac Léman");
-        b.put("ele", "372");
-        Attributes a = b.build();
+	@Test
+	public void constructorAndGetters() {
+		Attributes testAttributes = newSampleAttributes();
+		Attributed<Integer> testAttributed = new Attributed<>(5, testAttributes);
+		assertTrue(testAttributed.value() == 5);
+		assertSame(testAttributes, testAttributed.attributes());
+	}
 
-        Polygon p = new Polygon(null);
-        ap = new Attributed<>(p, a);
-    }
+	@Test
+	public void hasAttributeAndAttributeValueVerification() {
+		Attributes testAttributes = newSampleAttributes();
+		Attributed<Integer> testAttributed = new Attributed<>(5, testAttributes);
+		assertTrue(testAttributed.hasAttribute("testKey 1")
+				&& testAttributed.hasAttribute("testKey 2")
+				&& testAttributed.hasAttribute("testKey 3")
+				&& !testAttributed.hasAttribute("testKey 5"));
+		assertEquals("testValue 1", testAttributed.attributeValue("testKey 1"));
+		assertEquals("testValue 2", testAttributed.attributeValue("testKey 2"));
+		assertEquals("testValue 3", testAttributed.attributeValue("testKey 3"));
+	}
 
-    @Test
-    public void hasAttributeTest(){
-        assertTrue(ap.hasAttribute("ele"));
-    }
+	@Test
+	public void getAttributeValueWithDefaultValue() {
+		Attributes testAttributes = newSampleAttributes();
+		Attributed<String> testAttributed = new Attributed<>("test",
+				testAttributes);
+		assertEquals("testValue 1",
+				testAttributed.attributeValue("testKey 1", "default"));
+		assertEquals("default",
+				testAttributed.attributeValue("testKey 6", "default"));
+	}
 
-    @Test
-    public void attributeValue(){
-        assertEquals("water", ap.attributeValue("natural"));
-        assertEquals("Lac Léman", ap.attributeValue("name", "Lac"));
-        assertEquals("Lac", ap.attributeValue("Na", "Lac"));
-        assertEquals(372, ap.attributeValue("ele", 0));
-        assertEquals(300, ap.attributeValue("a", 300));
-    }
-
+	@Test
+	public void getAttributeValueWithDefaultInt() {
+		Attributes testAttributes = newSampleAttributes();
+		Attributed<Double> testAttributed = new Attributed<>(7.45,
+				testAttributes);
+		assertEquals(65, testAttributed.attributeValue("testKey 1", 65));
+		assertEquals(23, testAttributed.attributeValue("testKey 4", 65));
+		assertEquals(65, testAttributed.attributeValue("testKey 6", 65));
+	}
 }

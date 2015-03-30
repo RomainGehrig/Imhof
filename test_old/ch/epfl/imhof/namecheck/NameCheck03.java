@@ -10,7 +10,6 @@ import ch.epfl.imhof.Attributes;
 
 public class NameCheck03 {
     @Test
-    @Ignore
     public void useAllStage03Names() {
         // Attributes and Attributes.Builder
         Attributes.Builder ab = new Attributes.Builder();

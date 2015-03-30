@@ -1,72 +1,38 @@
 package ch.epfl.imhof.osm;
 
-import static org.junit.Assert.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import ch.epfl.imhof.Attributes;
 import ch.epfl.imhof.PointGeo;
+import ch.epfl.imhof.osm.OSMEntity.Builder;
+import org.junit.Test;
 
-public class OSMNodeTest {
+import static org.junit.Assert.assertSame;
 
-    private Attributes attr;
-    private final PointGeo pt = new PointGeo(1,1);
+public class OSMNodeTest extends OSMEntityTest {
 
-    @Before
-    public void createAttributes() {
-        Map<String, String> attrs = new HashMap<String, String>();
-        attrs.put("Bla", "bla");
-        this.attr = new Attributes(attrs);
+    private static final PointGeo TEST_POINT_GEO = new PointGeo(0.125621, 0.803253);
+
+    @Override
+    OSMEntity newEntity(long id, Attributes entityAttributes) {
+        PointGeo testPointGeo = TEST_POINT_GEO;
+        return new OSMNode(id, testPointGeo, entityAttributes);
     }
 
-    @Test (expected = NullPointerException.class)
-    public void testNullAttributes_Constructor() {
-        Attributes null_attr = null;
-        OSMNode n = new OSMNode(100, this.pt, null_attr);
-    }
-
-    @Test (expected = NullPointerException.class)
-    public void testNullPointGeo_Constructor() {
-        PointGeo null_pt = null;
-        OSMNode n = new OSMNode(100, null_pt, this.attr);
-    }
-
-    @Test (expected = NullPointerException.class)
-    public void testNullPointGeo_Builder() {
-        new OSMNode.Builder(10, null);
-    }
-
-    @Test (expected = IllegalStateException.class)
-    public void testIncompleteBuilder() {
-        OSMNode.Builder b = new OSMNode.Builder(10, this.pt);
-        b.setIncomplete();
-        b.build();
+    @Override
+    Builder newEntityBuilder() {
+        PointGeo testPointGeo = TEST_POINT_GEO;
+        return new OSMNode.Builder(1, testPointGeo);
     }
 
     @Test
-    public void testBuildWithNoAttributes() {
-        OSMNode.Builder b = new OSMNode.Builder(10, this.pt);
-        b.build();
+    public void constructorAndPosition() {
+        OSMNode testNode = new OSMNode(1, TEST_POINT_GEO, EMPTY_ATTRIBUTES);
+        assertSame(testNode.position(), TEST_POINT_GEO);
     }
-    
-    @Test(expected = NullPointerException.class)
-    public void constructorOSMNodeTest() {
-        new OSMNode (0, pt, null);
-    }
-    
+
     @Test
-    public void  BuilderTest(){
-        OSMNode.Builder b = new OSMNode.Builder(384723942929L, pt);
+    public void builderBuiltPosition() {
+        OSMNode.Builder testBuild = new OSMNode.Builder(1, TEST_POINT_GEO);
+        OSMNode testBuildResult = testBuild.build();
+        assertSame(testBuildResult.position(), TEST_POINT_GEO);
     }
-    
-    @Test
-    public void BuilderNegatifTest(){
-        OSMNode.Builder bNeg = new OSMNode.Builder(-1234, pt);
-    }
-    
 }
-
