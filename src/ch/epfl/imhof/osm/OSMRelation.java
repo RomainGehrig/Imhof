@@ -2,6 +2,7 @@ package ch.epfl.imhof.osm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import ch.epfl.imhof.Attributes;
 
@@ -27,7 +28,7 @@ public final class OSMRelation extends OSMEntity {
      */
     public OSMRelation(long id, List<Member> members, Attributes attributes){
         super(id, attributes);
-        this.members = members;
+        this.members = Collections.unmodifiableList(new ArrayList<>(members));
     }
 
     /**
