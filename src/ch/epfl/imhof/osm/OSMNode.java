@@ -41,7 +41,6 @@ public final class OSMNode extends OSMEntity{
     public final static class Builder extends OSMEntity.Builder {
 
         private final PointGeo position;
-        private final Attributes.Builder attributes = new Attributes.Builder();
 
         /**
          * construit un bâtisseur pour un nœud ayant l'identifiant et la position donnés

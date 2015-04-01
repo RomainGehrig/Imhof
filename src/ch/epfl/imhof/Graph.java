@@ -66,9 +66,8 @@ public final class Graph <N> {
          * @param n Le noeud donné à ajouter
          */
         public void addNode(N n){
-            if (neighbors.containsKey(n)) return;
-
-            neighbors.put(n, new HashSet<>());
+            if (!neighbors.containsKey(n))
+                neighbors.put(n, new HashSet<>());
         }
 
         /**
@@ -90,7 +89,7 @@ public final class Graph <N> {
          * @return le graphe composé des noeuds et arêtes ajoutés
          */
         public Graph<N> build(){
-            return new Graph<N>(new HashMap<N, Set<N>>(neighbors));
+            return new Graph<N>(neighbors);
         }
     }
 
