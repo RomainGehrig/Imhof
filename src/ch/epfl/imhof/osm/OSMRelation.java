@@ -136,9 +136,9 @@ public final class OSMRelation extends OSMEntity {
          */
         public OSMRelation build(){
             if(isIncomplete()){
-                throw new IllegalStateException();
+                throw new IllegalStateException("OSMRelation incomplète: ne peut pas build");
             }
-            return OSMRelation(super.id(), members, attributes.build());
+            return new OSMRelation(super.id(), members, attributes.build());
         }
 
 
