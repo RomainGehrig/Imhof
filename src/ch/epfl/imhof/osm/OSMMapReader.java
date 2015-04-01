@@ -84,7 +84,11 @@ public final class OSMMapReader {
                     break;
                 case "nd": // In OSMWay
                     try {
-                        ((OSMWay.Builder) elements.peek()).addNode(mapBuilder.nodeForId(Long.parseLong(atts.getValue("ref"))));
+                        OSMNode n = mapBuilder.nodeForId(Long.parseLong(atts.getValue("ref")));
+                        if (n == null)
+                            elements.peek().setIncomplete();
+                        else
+                            ((OSMWay.Builder) elements.peek()).addNode(n);
                     } catch (ClassCastException e) {
                         throw new SAXException("Invalid use of nd");
                     }
@@ -99,10 +103,18 @@ public final class OSMMapReader {
                 case "member": // in a relation
                     OSMRelation.Member.Type type;
                     switch (atts.getValue("type")) {
-                        case "way": type = OSMRelation.Member.Type.WAY;
-                        case "node": type = OSMRelation.Member.Type.NODE;
-                        case "relation": type = OSMRelation.Member.Type.RELATION;
-                        default: type = null; // will be handled later
+                        case "way":
+                            type = OSMRelation.Member.Type.WAY;
+                            break;
+                        case "node":
+                            type = OSMRelation.Member.Type.NODE;
+                            break;
+                        case "relation":
+                            type = OSMRelation.Member.Type.RELATION;
+                            break;
+                        default:
+                            type = null; // will be handled later
+                            break;
                     }
 
                     OSMEntity member = null;
@@ -119,6 +131,8 @@ public final class OSMMapReader {
                             member = mapBuilder.relationForId(iddd);
                             break;
                         }
+                        if (member == null)
+                            elements.peek().setIncomplete();
                     }
                     String role = atts.getValue("role");
 
