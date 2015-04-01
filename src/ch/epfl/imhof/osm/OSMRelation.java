@@ -39,7 +39,6 @@ public final class OSMRelation extends OSMEntity {
         return members;
     }
 
-
     /**
      * représente un membre d'une relation OSM
      * @author Yura Tak (247528)
@@ -108,8 +107,7 @@ public final class OSMRelation extends OSMEntity {
      */
     public static final class Builder extends OSMEntity.Builder{
 
-        private OSMRelation relation;
-        private List<Member> m;
+        private List<Member> members;
 
         /**
          * construit un bâtisseur pour une relation ayant l'identifiant donné
@@ -117,7 +115,7 @@ public final class OSMRelation extends OSMEntity {
          */
         public Builder(long id){
             super(id);
-            m = new ArrayList<>();
+            members = new ArrayList<>();
         }
 
         /**
@@ -127,8 +125,7 @@ public final class OSMRelation extends OSMEntity {
          * @param newMember
          */
         public void addMember(Member.Type type, String role, OSMEntity newMember){
-            Member newmember = new Member(type, role, newMember);
-            m.add(newmember);
+            members.add(new Member(type, role, newMember));
         }
 
         /**
@@ -141,8 +138,7 @@ public final class OSMRelation extends OSMEntity {
             if(isIncomplete()){
                 throw new IllegalStateException();
             }
-            relation = new OSMRelation(super.id(), m, attributes.build());
-            return relation;
+            return OSMRelation(super.id(), members, attributes.build());
         }
 
 
