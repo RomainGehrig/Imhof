@@ -69,18 +69,18 @@ public final class OSMMapReader {
                                  String qName,
                                  Attributes atts)
         throws SAXException {
-            long idd;
+            long id;
             switch(lName) {
                 case "node":
-                    idd = Long.parseLong(atts.getValue("id"));
+                    id = Long.parseLong(atts.getValue("id"));
                     double lon = Math.toRadians(Double.parseDouble(atts.getValue("lon")));
                     double lat = Math.toRadians(Double.parseDouble(atts.getValue("lat")));
                     PointGeo p = new PointGeo(lon, lat);
-                    elements.push(new OSMNode.Builder(idd, p));
+                    elements.push(new OSMNode.Builder(id, p));
                     break;
                 case "way":
-                    idd = Long.parseLong(atts.getValue("id"));
-                    elements.push(new OSMWay.Builder(idd));
+                    id = Long.parseLong(atts.getValue("id"));
+                    elements.push(new OSMWay.Builder(id));
                     break;
                 case "nd": // In OSMWay
                     try {
@@ -97,8 +97,8 @@ public final class OSMMapReader {
                     elements.peek().setAttribute(atts.getValue("k"), atts.getValue("v"));
                     break;
                 case "relation": //
-                    idd = Long.parseLong(atts.getValue("id"));
-                    elements.push(new OSMRelation.Builder(idd));
+                    id = Long.parseLong(atts.getValue("id"));
+                    elements.push(new OSMRelation.Builder(id));
                     break;
                 case "member": // in a relation
                     OSMRelation.Member.Type type;
@@ -118,17 +118,17 @@ public final class OSMMapReader {
                     }
 
                     OSMEntity member = null;
-                    Long iddd = Long.parseLong(atts.getValue("ref"));
+                    Long refID = Long.parseLong(atts.getValue("ref"));
                     if (type != null) {
                         switch (type) {
                         case WAY:
-                            member = mapBuilder.wayForId(iddd);
+                            member = mapBuilder.wayForId(refID);
                             break;
                         case NODE:
-                            member = mapBuilder.nodeForId(iddd);
+                            member = mapBuilder.nodeForId(refID);
                             break;
                         case RELATION:
-                            member = mapBuilder.relationForId(iddd);
+                            member = mapBuilder.relationForId(refID);
                             break;
                         }
                         if (member == null)
@@ -158,7 +158,6 @@ public final class OSMMapReader {
                 case "way":
                     mapBuilder.addWay((OSMWay) (((OSMWay.Builder) elements.pop()).build()));
                     break;
-
                 case "relation":
                     mapBuilder.addRelation((OSMRelation) (((OSMRelation.Builder) elements.pop()).build()));
                     break;
