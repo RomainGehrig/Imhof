@@ -23,7 +23,7 @@ public final class Graph <N> {
      */
     public Graph(Map<N, Set<N>> neighbors) {
         this.neighbors = new HashMap<N, Set<N>>();
-        for (Entry<N, Set<N>> neighbor : neighbors.entrySet()) {
+        for (Entry<N, Set<N>> neighbor: neighbors.entrySet()) {
             this.neighbors.put(neighbor.getKey(), Collections.unmodifiableSet(new HashSet<N>(neighbor.getValue())));
         }
         this.neighbors = Collections.unmodifiableMap(new HashMap<>(this.neighbors));
