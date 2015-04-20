@@ -93,10 +93,10 @@ public final class Attributes {
      */
     public Attributes keepOnlyKeys(Set<String> keysToKeep){
         Map<String, String> tmp = new HashMap<String, String>();
-        keysToKeep.retainAll(attributes.keySet()); // Filtre pour garder les clés qui font partie de notre attributes
 
         for(String key: keysToKeep){
-            tmp.put(key, get(key));
+            if (contains(key))
+                tmp.put(key, get(key));
         }
         return new Attributes(tmp);
     }
