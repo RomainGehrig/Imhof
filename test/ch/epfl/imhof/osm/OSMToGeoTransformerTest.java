@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 
 import org.junit.Test;
+import org.junit.Ignore;
 
 import ch.epfl.imhof.Attributed;
 import ch.epfl.imhof.Map;

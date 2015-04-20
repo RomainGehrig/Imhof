@@ -33,7 +33,6 @@ import ch.epfl.imhof.projection.CH1903Projection;
 public final class OSMToGeoTransformer {
 
     private final Projection projection;
-    private final Map.Builder builder;
 
     private final static Set<String> AREA_VALUE = new HashSet<>(Arrays.asList("yes", "1", "true"));
     private final static Set<String> AREA_ATTRIBUTS = new HashSet<>(Arrays.asList(
@@ -57,7 +56,6 @@ public final class OSMToGeoTransformer {
      */
     public OSMToGeoTransformer(Projection projection){
         this.projection = projection;
-        this.builder = new Map.Builder();
     }
 
     /**
@@ -67,7 +65,13 @@ public final class OSMToGeoTransformer {
      */
     public Map transform(OSMMap map) {
         PolyLine.Builder polyLineBuilder;
+        Map.Builder builder = new Map.Builder();
 
+        // System.out.println("FILTRE_POLYLINE" + FILTRE_POLYLINE);
+        // System.out.println("FILTRE_POLYGON" + FILTRE_POLYGON);
+
+
+        // System.out.println("Ways: " + map.ways());
         // Conversion des OSMWay
         for (OSMWay way: map.ways()) {
             polyLineBuilder = new PolyLine.Builder();
@@ -76,21 +80,31 @@ public final class OSMToGeoTransformer {
                 polyLineBuilder.addPoint(projection.project(node.position()));
             }
 
-            boolean isClosed = AREA_VALUE.contains(way.attributeValue("area")) || !way.attributes().keepOnlyKeys(AREA_ATTRIBUTS).isEmpty();
+            // way.attributes().PRINT();
+            Attributes area_attr = way.attributes().keepOnlyKeys(AREA_ATTRIBUTS);
+            // area_attr.PRINT();
 
-            if (isClosed) {
+            boolean isClosed = AREA_VALUE.contains(way.attributeValue("area")) || !(area_attr.isEmpty());
+
+            if (way.isClosed() && isClosed) {
                 Attributes attr = way.attributes().keepOnlyKeys(FILTRE_POLYGON);
+                // attr.PRINT();
+                // System.out.println("Attributes (closed): (contains something) " + !attr.isEmpty());
                 if (!attr.isEmpty()) // Il faut qu'il y ait des attributs pour pouvoir ajouter un polygone
                     builder.addPolygon(new Attributed<>(new Polygon(polyLineBuilder.buildClosed()),attr));
             } else {
                 Attributes attr = way.attributes().keepOnlyKeys(FILTRE_POLYLINE);
+                // attr.PRINT();
+                // System.out.println("Attributes (opened): (contains something) " + !attr.isEmpty());
                 if (!attr.isEmpty()) // Il faut qu'il y ait des attributs pour pouvoir ajouter une polyline
                     builder.addPolyLine(new Attributed<>(polyLineBuilder.buildOpen(),attr));
             }
         }
 
         // Conversion des OSMRelation
+        // System.out.println("Relations: " + map.relations());
         for (OSMRelation rel: map.relations()) {
+            // System.out.println("Members: " + rel.members());
             for (Attributed<Polygon> poly: assemblePolygon(rel, rel.attributes()))
                 builder.addPolygon(poly);
         }
@@ -129,12 +143,12 @@ public final class OSMToGeoTransformer {
                 continue;
 
             graphBuilder.addNode(nodes2.next());
-            while (nodes2.hasNext()) {
+            do {
                 OSMNode n1 = nodes1.next();
                 OSMNode n2 = nodes2.next();
                 graphBuilder.addNode(n2);
                 graphBuilder.addEdge(n1,n2);
-            }
+            } while (nodes2.hasNext());
         }
 
         Graph graph = graphBuilder.build();
@@ -222,8 +236,13 @@ public final class OSMToGeoTransformer {
         if (attr.isEmpty())
             return attributedPolygons;
 
+        // System.out.println("Attributes: " + attr.size());
+
         List<ClosedPolyLine> inners = ringsForRole(relation, "inner");
         List<ClosedPolyLine> outers = ringsForRole(relation, "outer");
+
+        // System.out.println("inners: " + inners);
+        // System.out.println("outers: " + outers);
 
         java.util.Map<ClosedPolyLine, List<ClosedPolyLine>> plainPolygones = new HashMap<>();
         for (ClosedPolyLine out: outers)
