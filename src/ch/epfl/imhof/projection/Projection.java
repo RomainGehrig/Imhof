@@ -4,7 +4,7 @@ import ch.epfl.imhof.geometry.Point;
 import ch.epfl.imhof.PointGeo;
 
 /**
- * Représente une projection 
+ * Représente une projection
  * @author Yura Tak (247528)
  * @author Romain Gehrig (223316)
  *

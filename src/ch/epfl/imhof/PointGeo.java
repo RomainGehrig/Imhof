@@ -7,10 +7,9 @@ package ch.epfl.imhof;
  *
  */
 public final class PointGeo {
-    final double longitude;
-    final double latitude;
-    
-    
+    private final double longitude;
+    private final double latitude;
+
     /**
      * Construit un point avec la longitude et la latitude données (en radians)
      * @param longitude la longitude du point, en radians
@@ -27,11 +26,11 @@ public final class PointGeo {
         if(latitude < -Math.PI/2 || latitude > Math.PI/2){
             throw new IllegalArgumentException("la latitude n'est pas dans l'intervalle");
         }
-        
+
         this.longitude = longitude;
         this.latitude = latitude;
     }
-    
+
     /**
      * Getter sur la longitude
      * @return la longitude
@@ -39,7 +38,7 @@ public final class PointGeo {
     public double longitude(){
         return longitude;
     }
-    
+
     /**
      * Getter sur la latitude
      * @return la latitude
