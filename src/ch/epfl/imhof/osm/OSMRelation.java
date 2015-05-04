@@ -18,6 +18,7 @@ public final class OSMRelation extends OSMEntity {
 
     public OSMRelation(long id, Attributes attributes) {
         super(id, attributes);
+        this.members = Collections.emptyList();
     }
 
     /**

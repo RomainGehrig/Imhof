@@ -76,7 +76,7 @@ public final class OSMToGeoTransformer {
         for (OSMWay way: map.ways()) {
             polyLineBuilder = new PolyLine.Builder();
 
-            for (OSMNode node: way.nodes()) {
+            for (OSMNode node: way.nonRepeatingNodes()) {
                 polyLineBuilder.addPoint(projection.project(node.position()));
             }
 
@@ -104,9 +104,9 @@ public final class OSMToGeoTransformer {
         // Conversion des OSMRelation
         // System.out.println("Relations: " + map.relations());
         for (OSMRelation rel: map.relations()) {
-            // System.out.println("Members: " + rel.members());
-            for (Attributed<Polygon> poly: assemblePolygon(rel, rel.attributes()))
-                builder.addPolygon(poly);
+            if (rel.attributes().get("type", "").equals("multipolygon"))
+                for (Attributed<Polygon> poly: assemblePolygon(rel, rel.attributes()))
+                    builder.addPolygon(poly);
         }
 
         return builder.build();
@@ -151,7 +151,7 @@ public final class OSMToGeoTransformer {
             } while (nodes2.hasNext());
         }
 
-        Graph graph = graphBuilder.build();
+        Graph<OSMNode> graph = graphBuilder.build();
 
         Set<OSMNode> visited = new HashSet<>();
         Deque<OSMNode> toVisit = new LinkedList<>();
@@ -240,6 +240,9 @@ public final class OSMToGeoTransformer {
 
         List<ClosedPolyLine> inners = ringsForRole(relation, "inner");
         List<ClosedPolyLine> outers = ringsForRole(relation, "outer");
+
+        if (inners == null || outers == null)
+            return Collections.emptyList();
 
         // System.out.println("inners: " + inners);
         // System.out.println("outers: " + outers);

@@ -8,7 +8,7 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 
 import org.junit.Test;
-import org.junit.Ignore;
+import org.junit.Test;
 
 import ch.epfl.imhof.Attributed;
 import ch.epfl.imhof.Map;
@@ -143,7 +143,7 @@ public class OSMToGeoTransformerTest {
     /*
      * creates two buildings from two relations using each two ways
      */
-    @Ignore
+    @Test
     public void joinedBuildingsFromRelation() {
         OSMMap testMapReadResult = null;
         try {
@@ -165,7 +165,7 @@ public class OSMToGeoTransformerTest {
     /*
      * creates two building from two closed ways containing the building key
      */
-    @Ignore
+    @Test
     public void joinedBuildingsFromClosedWay() {
         OSMMap testMapReadResult = null;
         try {
@@ -210,7 +210,7 @@ public class OSMToGeoTransformerTest {
         assertTrue(buildingFound && landUseFound);
     }
 
-    @Ignore
+    @Test
     public void buildingOneInnerHole() {
         OSMMap testMapReadResult = null;
         try {
@@ -290,7 +290,7 @@ public class OSMToGeoTransformerTest {
         assertEquals(6, polygon.value().shell().points().size());
     }
 
-    @Ignore
+    @Test
     public void tooManyNeighbors() {
         OSMMap testMapReadResult = null;
         try {
