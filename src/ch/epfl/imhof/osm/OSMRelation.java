@@ -14,7 +14,7 @@ import ch.epfl.imhof.Attributes;
  */
 public final class OSMRelation extends OSMEntity {
 
-    private List<Member> members;
+    private final List<Member> members;
 
     public OSMRelation(long id, Attributes attributes) {
         super(id, attributes);
@@ -107,7 +107,7 @@ public final class OSMRelation extends OSMEntity {
      */
     public static final class Builder extends OSMEntity.Builder{
 
-        private List<Member> members;
+        private final List<Member> members;
 
         /**
          * construit un bâtisseur pour une relation ayant l'identifiant donné

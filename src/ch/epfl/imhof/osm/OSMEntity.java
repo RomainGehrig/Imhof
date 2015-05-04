@@ -64,9 +64,9 @@ public abstract class OSMEntity {
      */
     public static class Builder{
 
-        private long id;
         private boolean isIncomplete = false;
-        protected Attributes.Builder attributes = new Attributes.Builder();
+        private final long id;
+        protected final Attributes.Builder attributes = new Attributes.Builder();
 
         /**
          * construit un bâtisseur pour une entité OSM identifiée par l'entier donné

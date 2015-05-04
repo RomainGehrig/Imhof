@@ -54,7 +54,7 @@ public final class OSMWay extends OSMEntity{
      */
     public List<OSMNode> nonRepeatingNodes() {
         // Note: nodes est garanti de posséder au moins 2 noeuds
-        return Collections.unmodifiableList(new ArrayList<>(nodes.subList(0, nodes.size() + (isClosed() ? -1 : 0))));
+        return new ArrayList<>(nodes.subList(0, nodes.size() + (isClosed() ? -1 : 0)));
     }
 
     /**
@@ -78,7 +78,7 @@ public final class OSMWay extends OSMEntity{
      * @return vrai ssi le chemin est fermé, c-à-d que son premier nœud est identique à son dernier nœud
      */
     public boolean isClosed(){
-        return (firstNode() == lastNode());
+        return firstNode().equals(lastNode());
     }
 
     /**
@@ -89,7 +89,7 @@ public final class OSMWay extends OSMEntity{
      */
     public final static class Builder extends OSMEntity.Builder {
 
-        private List<OSMNode> nodes = new ArrayList<>();
+        private final List<OSMNode> nodes = new ArrayList<>();
 
         /**
          * construit un bâtisseur pour un chemin ayant l'identifiant donné
