@@ -26,7 +26,7 @@ public final class Attributes {
      * Retourne la taille de la map des attributs
      * @return la taille
      */
-    public int size(){
+    private int size(){
         return attributes.size();
     }
 

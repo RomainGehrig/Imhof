@@ -143,7 +143,7 @@ public class OSMToGeoTransformerTest {
     /*
      * creates two buildings from two relations using each two ways
      */
-    @Test
+    @Ignore
     public void joinedBuildingsFromRelation() {
         OSMMap testMapReadResult = null;
         try {
@@ -165,7 +165,7 @@ public class OSMToGeoTransformerTest {
     /*
      * creates two building from two closed ways containing the building key
      */
-    @Test
+    @Ignore
     public void joinedBuildingsFromClosedWay() {
         OSMMap testMapReadResult = null;
         try {
@@ -210,7 +210,7 @@ public class OSMToGeoTransformerTest {
         assertTrue(buildingFound && landUseFound);
     }
 
-    @Test
+    @Ignore
     public void buildingOneInnerHole() {
         OSMMap testMapReadResult = null;
         try {
@@ -290,7 +290,7 @@ public class OSMToGeoTransformerTest {
         assertEquals(6, polygon.value().shell().points().size());
     }
 
-    @Test
+    @Ignore
     public void tooManyNeighbors() {
         OSMMap testMapReadResult = null;
         try {
