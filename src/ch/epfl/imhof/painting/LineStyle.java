@@ -1,5 +1,7 @@
 package ch.epfl.imhof.painting;
 
+import com.sun.prism.BasicStroke;
+
 /**
  * regroupe tous les paramètres de style utiles au dessin d'une ligne
  * @author Yura Tak (247528)
@@ -10,16 +12,30 @@ public class LineStyle {
     
     private final float width;
     private final Color color;
-    private final lineCap cap;
-    private final lineJoin join;
+    private final LineCap cap;
+    private final LineJoin join;
     private final float[] dashingPattern;
     
-    public enum lineCap{
-        BUTT, ROUND, SQUARE
+    public enum LineCap{
+        Butt(BasicStroke.CAP_BUTT), Round(BasicStroke.CAP_ROUND), Square(BasicStroke.CAP_SQUARE);
+        private int AWTLineCap;
+        private LineCap(int AWTLineCap){
+            this.AWTLineCap = AWTLineCap;
+        }
+        public int getAWT(){
+            return AWTLineCap;
+        }
     };
     
-    public enum lineJoin {
-        BEVEL, MITER, ROUND
+    public enum LineJoin {
+        Bevel(BasicStroke.JOIN_BEVEL), Miter(BasicStroke.JOIN_MITER), Round(BasicStroke.JOIN_ROUND);
+        private int AWTLineJoin;
+        private LineJoin(int AWTLineJoin){
+            this.AWTLineJoin = AWTLineJoin;
+        }
+        public int getAWT(){
+            return AWTLineJoin;
+        }
     }
     
     /**
@@ -32,7 +48,7 @@ public class LineStyle {
      * @throw IllegalArgumentException si la largeur du trait est négative 
      *                              ou si l'un des éléments de la séquence d'alternance des segments est négatif ou nul
      */
-    private LineStyle(float width, Color color, lineCap cap, lineJoin join, float[] dashingPattern){
+    public LineStyle(float width, Color color, LineCap cap, LineJoin join, float[] dashingPattern){
         if(width<0){
             throw new IllegalArgumentException();
         }
@@ -57,8 +73,8 @@ public class LineStyle {
      * @param width La largeur du trait
      * @param color La couleur du trait
      */
-    private LineStyle(float width, Color color){
-        this(width, color, lineCap.BUTT, lineJoin.MITER, new float[]{});
+    public LineStyle(float width, Color color){
+        this(width, color, LineCap.Butt, LineJoin.Miter, new float[]{});
     }
     
     /**
@@ -81,7 +97,7 @@ public class LineStyle {
      * retourne la terminaison des lignes
      * @return la terminaison des lignes
      */
-    public lineCap cap(){
+    public LineCap cap(){
         return cap;
     }
     
@@ -89,7 +105,7 @@ public class LineStyle {
      * retourne la jointure des lignes
      * @return la jointure des lignes
      */
-    public lineJoin join(){
+    public LineJoin join(){
         return join;
     }
     
@@ -124,7 +140,7 @@ public class LineStyle {
      * @param c La terminaison des lignes
      * @return un style identique mais avec une nouvelle terminaison des lignes
      */
-    public LineStyle withCap(lineCap c){
+    public LineStyle withCap(LineCap c){
         return new LineStyle(width, color, c, join, dashingPattern);
     }
     
@@ -133,7 +149,7 @@ public class LineStyle {
      * @param j La jointure des lignes
      * @return un style identique mais avec une nouvelle jointure des lignes
      */
-    public LineStyle withJoin(lineJoin j){
+    public LineStyle withJoin(LineJoin j){
         return new LineStyle(width, color, cap, j, dashingPattern);
     }
     
