@@ -31,6 +31,15 @@ public final class Filters {
     }
     
     /**
+     * vérifie si on applique à une entité attribuée ne portant pas un certain nom
+     * @param attribut L'attribut passé en argument
+     * @return vrai si la valeur attribuée à laquelle on l'applique ne possède pas un attribut portant ce nom
+     */
+    public static Predicate<Attributed<?>> notTagged(String attribut){
+        return x-> !x.hasAttribute(attribut);
+    }
+    
+    /**
      * vérifie si on applique à une entité attribuée portant un certain nom et si la valeur associée à cet attribut fait partie de celles données
      * @param attribut  L'attribut passé en argument
      * @param valeur La valeur passé en argument
