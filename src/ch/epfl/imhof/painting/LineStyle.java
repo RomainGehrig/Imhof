@@ -9,14 +9,8 @@ import com.sun.prism.BasicStroke;
  *
  */
 public class LineStyle {
-    
-    private final float width;
-    private final Color color;
-    private final LineCap cap;
-    private final LineJoin join;
-    private final float[] dashingPattern;
-    
-    public enum LineCap{
+
+    public enum LineCap {
         Butt(BasicStroke.CAP_BUTT), Round(BasicStroke.CAP_ROUND), Square(BasicStroke.CAP_SQUARE);
         private int AWTLineCap;
         private LineCap(int AWTLineCap){
@@ -26,7 +20,7 @@ public class LineStyle {
             return AWTLineCap;
         }
     };
-    
+
     public enum LineJoin {
         Bevel(BasicStroke.JOIN_BEVEL), Miter(BasicStroke.JOIN_MITER), Round(BasicStroke.JOIN_ROUND);
         private int AWTLineJoin;
@@ -37,7 +31,13 @@ public class LineStyle {
             return AWTLineJoin;
         }
     }
-    
+
+    private final float width;
+    private final Color color;
+    private final LineCap cap;
+    private final LineJoin join;
+    private final float[] dashingPattern;
+
     /**
      * construit le style en prenant en arguments tous les paramètres de style
      * @param width La largeur du trait
@@ -45,29 +45,30 @@ public class LineStyle {
      * @param cap La terminaison des lignes
      * @param join La jointure des segments
      * @param dashingPattern L'alternance des sections opaques et transparentes
-     * @throw IllegalArgumentException si la largeur du trait est négative 
+     * @throw IllegalArgumentException si la largeur du trait est négative
      *                              ou si l'un des éléments de la séquence d'alternance des segments est négatif ou nul
      */
     public LineStyle(float width, Color color, LineCap cap, LineJoin join, float[] dashingPattern){
-        if(width<0){
+        if (width < 0) {
             throw new IllegalArgumentException();
         }
-         if(dashingPattern != null){
-            for(int i = 0; i<dashingPattern.length; ++i){
-                if(dashingPattern[i] < 0 || dashingPattern[i] == 0){
+
+        if (dashingPattern != null) {
+            for (int i = 0; i < dashingPattern.length; ++i) {
+                if (dashingPattern[i] < 0 || dashingPattern[i] == 0) {
                     throw new IllegalArgumentException();
                 }
             }
         }
-        
+
         this.width = width;
         this.color = color;
         this.cap = cap;
         this.join = join;
         this.dashingPattern = dashingPattern;
     }
-        
-    
+
+
     /**
      * construit le style en prenant en arguments que la largeur et la couleur du trait
      * @param width La largeur du trait
@@ -76,7 +77,7 @@ public class LineStyle {
     public LineStyle(float width, Color color){
         this(width, color, LineCap.Butt, LineJoin.Miter, new float[]{});
     }
-    
+
     /**
      * retourne la largeur du trait
      * @return la largeur du trait
@@ -84,7 +85,7 @@ public class LineStyle {
     public float width(){
         return width;
     }
-    
+
     /**
      * retourne la couleur du trait
      * @return la couleur du trait
@@ -92,7 +93,7 @@ public class LineStyle {
     public Color color(){
         return color;
     }
-    
+
     /**
      * retourne la terminaison des lignes
      * @return la terminaison des lignes
@@ -100,7 +101,7 @@ public class LineStyle {
     public LineCap cap(){
         return cap;
     }
-    
+
     /**
      * retourne la jointure des lignes
      * @return la jointure des lignes
@@ -108,7 +109,7 @@ public class LineStyle {
     public LineJoin join(){
         return join;
     }
-    
+
     /**
      * retourne l'alternance des sections opaques et transparentes
      * @return l'alternance des sections opaques et transparentes
@@ -116,7 +117,7 @@ public class LineStyle {
     public float[] dashingPattern(){
         return dashingPattern();
     }
-    
+
     /**
      * construit un style identique, sauf pour le largeur passé en argument
      * @param w Le largeur du trait
@@ -125,7 +126,7 @@ public class LineStyle {
     public LineStyle withWidth(float w){
         return new LineStyle(w, color, cap, join, dashingPattern);
     }
-    
+
     /**
      * construit un style identique, sauf pour la couleur passée en argument
      * @param c La couleur du trait
@@ -134,7 +135,7 @@ public class LineStyle {
     public LineStyle withColor(Color c){
         return new LineStyle(width, c, cap, join, dashingPattern);
     }
-    
+
     /**
      * construit un style identique, sauf pour la terminaison des lignes passée en argument
      * @param c La terminaison des lignes
@@ -143,7 +144,7 @@ public class LineStyle {
     public LineStyle withCap(LineCap c){
         return new LineStyle(width, color, c, join, dashingPattern);
     }
-    
+
     /**
      * construit un style identique, sauf pour la jointure des lignes passée en argument
      * @param j La jointure des lignes
@@ -152,7 +153,7 @@ public class LineStyle {
     public LineStyle withJoin(LineJoin j){
         return new LineStyle(width, color, cap, j, dashingPattern);
     }
-    
+
     /**
      * construit un style identique, sauf pour l'alternance des sections opaques et transparentes passée en argument
      * @param f L'alternance des sections opaques et transparentes
