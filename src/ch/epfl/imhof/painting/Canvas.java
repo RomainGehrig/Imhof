@@ -10,7 +10,7 @@ public interface Canvas {
      * @param style style de ligne donné
      */
     public abstract void drawPolyLine(PolyLine polyline, LineStyle style);
-    
+
     /**
      * permet de dessiner sur la toile un polygone donné avec une couleur donnée
      * @param polygon Polygone donné

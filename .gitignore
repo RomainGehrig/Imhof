@@ -10,3 +10,4 @@ docs/
 data/
 lib/
 checkstyle-config.xml
+*.png
