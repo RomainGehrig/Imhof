@@ -54,18 +54,21 @@ public class LineStyle {
         }
 
         if (dashingPattern != null) {
+            this.dashingPattern = new float[dashingPattern.length];
             for (int i = 0; i < dashingPattern.length; ++i) {
-                if (dashingPattern[i] < 0 || dashingPattern[i] == 0) {
+                if (dashingPattern[i] <= 0) {
                     throw new IllegalArgumentException();
                 }
+                this.dashingPattern[i] = dashingPattern[i];
             }
+        } else {
+            this.dashingPattern = null;
         }
 
         this.width = width;
         this.color = color;
         this.cap = cap;
         this.join = join;
-        this.dashingPattern = dashingPattern;
     }
 
 
@@ -75,7 +78,7 @@ public class LineStyle {
      * @param color La couleur du trait
      */
     public LineStyle(float width, Color color){
-        this(width, color, LineCap.Butt, LineJoin.Miter, new float[]{});
+        this(width, color, LineCap.Butt, LineJoin.Miter, null);
     }
 
     /**
@@ -115,7 +118,7 @@ public class LineStyle {
      * @return l'alternance des sections opaques et transparentes
      */
     public float[] dashingPattern(){
-        return dashingPattern();
+        return dashingPattern;
     }
 
     /**

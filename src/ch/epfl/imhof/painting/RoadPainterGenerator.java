@@ -2,6 +2,7 @@ package ch.epfl.imhof.painting;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 import java.util.function.Predicate;
 
 import ch.epfl.imhof.Attributed;
@@ -16,40 +17,42 @@ import ch.epfl.imhof.painting.LineStyle.LineJoin;
  *
  */
 public abstract class RoadPainterGenerator {
-    
+
+
+    // Constructeur privé
+    private RoadPainterGenerator() {}
+
     //TODO : ROMAIIIINNN : il faut retourner un painter à partir de mon tableau à deux dimensions avec le Stream T^T
     /**
-     * 
+     *
      * @param roadSpecs Un nombre variable de spécifications de routes passé en arguments
      * @return le peintre pour le réseau routier correspondant
      */
     public static Painter painterForRoads(RoadSpec... roadSpecs){
-        
-        List<Painter> a = new ArrayList<>();
-        List<Painter> b = new ArrayList<>();
-        List<Painter> c = new ArrayList<>();
-        List<Painter> d = new ArrayList<>();
-        List<Painter> e = new ArrayList<>();
-        
-        for(RoadSpec roadSpec : roadSpecs){
-            a.add(roadSpec.BridgeInSpec());
-            b.add(roadSpec.BridgeOutSpec());
-            c.add(roadSpec.RoadInSpec());
-            d.add(roadSpec.RoadOutSpec());
-            e.add(roadSpec.TunnelSpec());
-            roadSpec.BridgeInSpec().above(roadSpec.BridgeOutSpec()).above(roadSpec.RoadInSpec()).above(roadSpec.RoadOutSpec()).above(roadSpec.TunnelSpec());
+
+        List<List<Painter>> painters = new ArrayList<>();
+        List<Painter> ps = new ArrayList<>();
+
+        for (int i=0; i<5; ++i) {
+            painters.add(new ArrayList<>());
         }
-        
-        List<List<Painter>> l = new ArrayList<>();
-        l.add(a);
-        l.add(b);
-        l.add(c);
-        l.add(d);
-        l.add(e);
-        
-        return null;
+
+        for(RoadSpec roadSpec : roadSpecs){
+            painters.get(0).add(roadSpec.BridgeInSpec());
+            painters.get(1).add(roadSpec.BridgeOutSpec());
+            painters.get(2).add(roadSpec.RoadInSpec());
+            painters.get(3).add(roadSpec.RoadOutSpec());
+            painters.get(4).add(roadSpec.TunnelSpec());
+            ps.add(roadSpec.BridgeInSpec().above(roadSpec.BridgeOutSpec()).above(roadSpec.RoadInSpec()).above(roadSpec.RoadOutSpec()).above(roadSpec.TunnelSpec()));
+        }
+
+        Painter paint = painters.stream()
+            .map(subPainters -> subPainters.stream().reduce(Painter::above).get())
+            .reduce(Painter::above).get();
+
+        return paint; //ps.stream().reduce(null, (r,p) -> r == null ? p : p.above(r));
     }
-    
+
     /**
      * décrit le dessin d'un type de route donné
      * @author Yura Tak (247528)
@@ -57,17 +60,17 @@ public abstract class RoadPainterGenerator {
      *
      */
     public final static class RoadSpec{
-        
+
         private final Predicate<Attributed<?>> filter;
         private final float wi;
         private final Color ci;
         private final float wc;
         private final Color cc;
-        
+
         /**
          * construit une spécification de route
          * @param filter Filtre permettant de sélectionner ce type de route
-         * @param wi Un paramètre de style 
+         * @param wi Un paramètre de style
          * @param ci Un paramètre de style, une couleur
          * @param wc Un paramètre de style
          * @param cc Un paramètre de style, une couleur
@@ -79,26 +82,25 @@ public abstract class RoadPainterGenerator {
             this.wc = wc;
             this.cc = cc;
         }
-        
+
         public Painter BridgeInSpec(){
             return Painter.line(wi, ci, LineCap.Round, LineJoin.Round, null).when(filter.and(Filters.tagged("bridge")));
         }
-        
+
         public Painter BridgeOutSpec(){
             return Painter.line(wi+2*wc, cc, LineCap.Butt, LineJoin.Round, null).when(filter.and(Filters.tagged("bridge")));
         }
-        
+
         public Painter RoadInSpec(){
             return Painter.line(wi, ci, LineCap.Round, LineJoin.Round, null).when(filter.and(Filters.notTagged("bridge").and(Filters.notTagged("tunnel"))));
         }
-        
+
         public Painter RoadOutSpec(){
             return Painter.line(wi+2*wc, cc, LineCap.Round, LineJoin.Round, null).when(filter.and(Filters.notTagged("bridge").and(Filters.notTagged("tunnel"))));
         }
-        
+
         public Painter TunnelSpec(){
             return Painter.line(wi/2, cc, LineCap.Butt, LineJoin.Round, new float[]{2*wi, 2*wi}).when(filter.and(Filters.tagged("tunnel")));
         }
     }
 }
-

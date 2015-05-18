@@ -24,7 +24,7 @@ public class Java2DCanvas implements Canvas{
 
         double pica = dpi/72.0;
 
-        this.transformation = Point.alignedCoordinateChange(BL, TR, new Point(0, h), new Point(l,0));
+        this.transformation = Point.alignedCoordinateChange(BL, TR, new Point(0, h/pica), new Point(l/pica,0));
         this.image = new BufferedImage(l, h, BufferedImage.TYPE_INT_RGB);
 
         this.ctx = image.createGraphics();

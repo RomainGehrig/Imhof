@@ -146,12 +146,13 @@ public interface Painter {
      */
     public default Painter layered(){
         return (map, canvas) -> {
-            Painter main = when(Filters.onLayer(-5));
+            Painter main = this.when(Filters.onLayer(-5));
             Painter current = main;
             for(int i = -4 ; i <= 5; ++i){
-                current = when(Filters.onLayer(i));
-                main = main.above(current);
+                current = this.when(Filters.onLayer(i));
+                main = current.above(main);
             }
+            main.drawMap(map, canvas);
         };
     }
 

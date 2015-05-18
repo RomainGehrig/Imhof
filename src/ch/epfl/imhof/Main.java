@@ -7,11 +7,41 @@ import javax.imageio.ImageIO;
 
 import ch.epfl.imhof.geometry.Point;
 import ch.epfl.imhof.painting.*;
+import ch.epfl.imhof.osm.OSMMap;
 import ch.epfl.imhof.osm.OSMMapReader;
 import ch.epfl.imhof.osm.OSMToGeoTransformer;
 import ch.epfl.imhof.projection.*;
 
+
+// TESTS
+import static ch.epfl.imhof.painting.Color.gray;
+import static ch.epfl.imhof.painting.Color.rgb;
+import static ch.epfl.imhof.painting.Filters.tagged;
+import static ch.epfl.imhof.painting.Painter.line;
+import static ch.epfl.imhof.painting.Painter.outline;
+import static ch.epfl.imhof.painting.Painter.polygon;
+import ch.epfl.imhof.painting.Color;
+import ch.epfl.imhof.painting.LineStyle.LineCap;
+import ch.epfl.imhof.painting.LineStyle.LineJoin;
+import ch.epfl.imhof.painting.Painter;
+import ch.epfl.imhof.painting.RoadPainterGenerator;
+import ch.epfl.imhof.painting.RoadPainterGenerator.RoadSpec;
+
+
 public class Main {
+    // TESTS
+    private Color black = Color.BLACK;
+    private Color darkGray = gray(0.2);
+    private Color darkGreen = rgb(0.75, 0.85, 0.7);
+    private Color darkRed = rgb(0.7, 0.15, 0.15);
+    private Color darkBlue = rgb(0.45, 0.7, 0.8);
+    private Color lightGreen = rgb(0.85, 0.9, 0.85);
+    private Color lightGray = gray(0.9);
+    private Color orange = rgb(1, 0.75, 0.2);
+    private Color lightYellow = rgb(1, 1, 0.5);
+    private Color lightRed = rgb(0.95, 0.7, 0.6);
+    private Color lightBlue = rgb(0.8, 0.9, 0.95);
+    private Color white = Color.WHITE;
 
     public static void main(String[] args) {
         // Le peintre et ses filtres
@@ -22,25 +52,29 @@ public class Main {
 
         Predicate<Attributed<?>> isBuilding =
             Filters.tagged("building");
+        Predicate<Attributed<?>> isHighway =
+            Filters.tagged("natural");
         Painter buildingsPainter =
-            Painter.polygon(Color.BLACK).when(isBuilding);
+            Painter.polygon(Color.BLACK).when(isHighway);
 
-        Painter painter = buildingsPainter.above(lakesPainter);
+        Painter painter = SwissPainter.painter();
 
         Projection p = new CH1903Projection();
-        Map map = null;
+        OSMMap m = null;
         try {
-            map = (new OSMToGeoTransformer(p)).transform(OSMMapReader.readOSMFile("data/lausanne.osm.gz",true)); // Lue depuis lausanne.osm.gz
+            m = OSMMapReader.readOSMFile("data/lausanne.osm.gz",true); // Lue depuis lausanne.osm.gz
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
+        Map map = (new OSMToGeoTransformer(p)).transform(m);
+
         // La toile
         Point bl = new Point(532510, 150590);
         Point tr = new Point(539570, 155260);
         Java2DCanvas canvas =
-            new Java2DCanvas(bl, tr, 800, 530, 72, Color.WHITE);
+            new Java2DCanvas(bl, tr, 1600, 1080, 150, Color.WHITE);
 
         // Dessin de la carte et stockage dans un fichier
         painter.drawMap(map, canvas);
