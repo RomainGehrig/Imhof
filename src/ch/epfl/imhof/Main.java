@@ -61,8 +61,28 @@ public class Main {
 
         Projection p = new CH1903Projection();
         OSMMap m = null;
+        Point bl = null;
+        Point tr = null;
+        Java2DCanvas canvas = null;
+        String filename = null;
+
         try {
-            m = OSMMapReader.readOSMFile("data/lausanne.osm.gz",true); // Lue depuis lausanne.osm.gz
+            switch (1) {
+            case 0:
+                m = OSMMapReader.readOSMFile("data/lausanne.osm.gz",true); // Lue depuis lausanne.osm.gz
+                bl = new Point(532510, 150590);
+                tr = new Point(539570, 155260);
+                canvas = new Java2DCanvas(bl, tr, 1600, 1080, 150, Color.WHITE);
+                filename = "loz";
+                break;
+            case 1:
+                m = OSMMapReader.readOSMFile("data/interlaken.osm.gz",true);
+                bl = new Point(628590, 168210);
+                tr = new Point(635660, 172870);
+                canvas = new Java2DCanvas(bl, tr, 800, 530, 72, Color.WHITE);
+                filename = "inter";
+                break;
+            }
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -70,16 +90,10 @@ public class Main {
 
         Map map = (new OSMToGeoTransformer(p)).transform(m);
 
-        // La toile
-        Point bl = new Point(532510, 150590);
-        Point tr = new Point(539570, 155260);
-        Java2DCanvas canvas =
-            new Java2DCanvas(bl, tr, 1600, 1080, 150, Color.WHITE);
-
         // Dessin de la carte et stockage dans un fichier
         painter.drawMap(map, canvas);
         try {
-            ImageIO.write(canvas.image(), "png", new File("loz.png"));
+            ImageIO.write(canvas.image(), "png", new File(filename + ".png"));
         } catch (IOException e) {}
     }
 }
