@@ -20,6 +20,7 @@ public final class Vector3 {
         this.x=x;
         this.y=y;
         this.z=z;
+        System.out.println("x:" + x + " y: " + y + " z: " + z);
     }
 
     /**

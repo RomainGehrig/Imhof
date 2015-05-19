@@ -102,11 +102,11 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
     }
 
     public Vector3 normalAt(PointGeo pt) {
-        double longDiff = pt.longitude() - basePoint.longitude();
-        double latDiff = pt.latitude() - basePoint.latitude();
+        double longDiff = Math.toDegrees(pt.longitude() - basePoint.longitude());
+        double latDiff = Math.toDegrees(pt.latitude() - basePoint.latitude());
 
         if (latDiff > 1 || latDiff < 0 || longDiff > 1 || longDiff < 0)
-            throw new IllegalArgumentException("PointGeo is not in the correct range");
+            throw new IllegalArgumentException("PointGeo is not in the correct range.");
 
         /*
           Schéma des points:
@@ -119,7 +119,7 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
                c ----- d v
 
           Vecteurs utiles: AB, AC, DB, DC
-         */
+        */
 
         /*
           Schéma des vecteurs:
@@ -132,10 +132,10 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
          (i,j) o------>o (i+1,j)
                    a
 
-         */
+        */
 
-        int i = lowerLeftX(pt.longitude());
-        int j = lowerLeftY(pt.latitude());
+        int i = bottomLeftX(Math.toDegrees(pt.longitude()));
+        int j = bottomLeftY(Math.toDegrees(pt.latitude()));
 
         double s = delta * Earth.RADIUS; // Distance en mètres entre les points
 
@@ -143,48 +143,25 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
         double y = 1/2d * s * (heightAt(i,j) + heightAt(i+1,j) - heightAt(i,j+1) - heightAt(i+1,j+1));
         double z = s * s;
 
-        // double firstLong = basePoint.longitude() + firstX*delta;
-        // double firstLat = basePoint.latitude() + firstY*delta;
-        // Point3 a = new Point3(firstLong      , firstLat      , (double) getHeightAt(firstX  , firstY  ));
-        // Point3 b = new Point3(firstLong+delta, firstLat      , (double) getHeightAt(firstX+1, firstY  ));
-        // Point3 c = new Point3(firstLong      , firstLat+delta, (double) getHeightAt(firstX  , firstY+1));
-        // Point3 d = new Point3(firstLong+delta, firstLat+delta, (double) getHeightAt(firstX+1, firstY+1));
-
-        // Vector3 ab = a.toVector(b);
-        // Vector3 ac = a.toVector(c);
-        // Vector3 db = d.toVector(b);
-        // Vector3 dc = d.toVector(c);
-
         return new Vector3(x,y,z);
     }
 
-    private short heightAt(int x, int y) {
-        return buffer.get(x + y*lineLength);
+    // FIXME PUBLIC
+    public short heightAt(int i, int j) {
+        System.out.println("i: " + i + " j: " + j + " index: " + (i + j*(lineLength-1)));
+        return buffer.get(i + j*(lineLength-1));
     }
 
-    private int lowerLeftX(double longitude) {
-        int x = (int)Math.floor((longitude - basePoint.longitude())*lineLength);
-        return Math.min(lineLength-1, x);
+
+    // FIXME PUBLIC
+    public int bottomLeftX(double longitude) {
+        int x = (int) Math.floor((longitude - Math.toDegrees(basePoint.longitude())) * lineLength);
+        return Math.min(x, lineLength-2);
     }
 
-    private int lowerLeftY(double latitude) {
-        int y = (int)Math.floor((1 - (latitude - basePoint.latitude()))*lineLength);
-        return Math.max(1, y);
-    }
-
-    private final class Point3 {
-        private final double x;
-        private final double y;
-        private final double z;
-
-        public Point3(double x, double y, double z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public Vector3 toVector(Point3 to) {
-            return new Vector3(to.x - x, to.y - y, to.z - z);
-        }
+    // FIXME PUBLIC
+    public int bottomLeftY(double latitude) {
+        int y = (int) Math.floor((latitude - Math.toDegrees(basePoint.latitude())) * lineLength);
+        return (lineLength - 1 - Math.min(y, lineLength-1));
     }
 }
