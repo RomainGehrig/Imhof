@@ -16,7 +16,7 @@ public final class Point {
      * @param x coordonnée x
      * @param y coordonnée y
      */
-    public Point(double x, double y){
+    public Point(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -25,7 +25,7 @@ public final class Point {
      * Getter sur la coordonnée x
      * @return Coordonnée x
      */
-    public double x(){
+    public double x() {
         return x;
     }
 
@@ -33,7 +33,7 @@ public final class Point {
      * Getter sur la coordonnée y
      * @return coordonnée y
      */
-    public double y(){
+    public double y() {
         return y;
     }
 
@@ -45,7 +45,7 @@ public final class Point {
      * @param d Point d dans le repère d'arrivée
      * @return un nouveau point dans le repère d'arrivée à partir d'un point auquel on l'applique
      */
-    public static Function<Point, Point> alignedCoordinateChange(Point a, Point b, Point c, Point d){
+    public static Function<Point, Point> alignedCoordinateChange(Point a, Point b, Point c, Point d) {
         if(a.x == b.x || a.y == b.y){
             throw new IllegalArgumentException();
         }
