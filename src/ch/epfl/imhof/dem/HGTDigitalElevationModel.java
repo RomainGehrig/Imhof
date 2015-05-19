@@ -88,8 +88,8 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
         if (length != Math.floor(length)) {
             throw new IllegalArgumentException("HGT file does not have a useable format. (Is not square)");
         }
-        lineLength = (int)length;
-        delta = 1.0/(lineLength - 1); // On ne compte pas le dernier point
+        lineLength = ((int)length) - 1; // On ne compte pas le dernier point
+        delta = 1.0/lineLength;
 
         this.file = new FileInputStream(file);
         buffer = this.file.getChannel()
@@ -109,22 +109,9 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
             throw new IllegalArgumentException("PointGeo is not in the correct range.");
 
         /*
-          Schéma des points:
-
-               <-- δ -->
-               a ----- b ^
-               |       | |
-               |       | δ
-               |       | |
-               c ----- d v
-
-          Vecteurs utiles: AB, AC, DB, DC
-        */
-
-        /*
           Schéma des vecteurs:
                    c
-       (i,j+1) o<------o (i+1,j+1)
+       (i,j-1) o<------o (i+1,j-1)
                ^       |
              b |       |
                |       | d
@@ -132,15 +119,22 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
          (i,j) o------>o (i+1,j)
                    a
 
+          Changements par rapport à la formule du cours: la coordonnée j est
+          inversée, donc j+1 devient j-1: cela simplifie les calculs suivants
         */
 
         int i = bottomLeftX(Math.toDegrees(pt.longitude()));
         int j = bottomLeftY(Math.toDegrees(pt.latitude()));
 
-        double s = delta * Earth.RADIUS; // Distance en mètres entre les points
+        // Distance en mètres entre les points
+        double s = delta * Earth.RADIUS;
 
-        double x = 1/2d * s * (heightAt(i,j) - heightAt(i+1,j) + heightAt(i,j+1) - heightAt(i+1,j+1));
-        double y = 1/2d * s * (heightAt(i,j) + heightAt(i+1,j) - heightAt(i,j+1) - heightAt(i+1,j+1));
+        System.out.println("x");
+        // Changement de j+1 en j-1 ici:
+        double x = 1/2d * s * (heightAt(i,j) - heightAt(i+1,j) + heightAt(i,j-1) - heightAt(i+1,j-1));
+        System.out.println("y");
+        // Changement de j+1 en j-1 ici:
+        double y = 1/2d * s * (heightAt(i,j) + heightAt(i+1,j) - heightAt(i,j-1) - heightAt(i+1,j-1));
         double z = s * s;
 
         return new Vector3(x,y,z);
@@ -148,20 +142,21 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
 
     // FIXME PUBLIC
     public short heightAt(int i, int j) {
-        System.out.println("i: " + i + " j: " + j + " index: " + (i + j*(lineLength-1)));
-        return buffer.get(i + j*(lineLength-1));
+        System.out.print("i: " + i + " j: " + j + " index: " + (i + j*lineLength));
+        System.out.println(" value: " + buffer.get(i + j*(lineLength + 1)));
+        return buffer.get(i + j*(lineLength + 1));
     }
 
 
     // FIXME PUBLIC
     public int bottomLeftX(double longitude) {
         int x = (int) Math.floor((longitude - Math.toDegrees(basePoint.longitude())) * lineLength);
-        return Math.min(x, lineLength-2);
+        return Math.min(x, lineLength-1);
     }
 
     // FIXME PUBLIC
     public int bottomLeftY(double latitude) {
         int y = (int) Math.floor((latitude - Math.toDegrees(basePoint.latitude())) * lineLength);
-        return (lineLength - 1 - Math.min(y, lineLength-1));
+        return (lineLength - Math.min(y, lineLength - 1));
     }
 }

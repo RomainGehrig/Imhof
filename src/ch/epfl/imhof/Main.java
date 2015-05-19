@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import ch.epfl.imhof.PointGeo;
 import ch.epfl.imhof.geometry.Point;
 import ch.epfl.imhof.painting.*;
 import ch.epfl.imhof.osm.OSMMap;
@@ -30,6 +31,11 @@ public class Main {
         try {
             dem = new HGTDigitalElevationModel(new File("data/imhof-dems/N46E007.hgt"));
         } catch (IOException e) {}
+
+        System.out.println("Bottom left X: " + dem.bottomLeftX(7.0));
+        System.out.println("Bottom left Y: " + dem.bottomLeftY(47.0));
+
+        System.out.println(dem.normalAt(new PointGeo(Math.toRadians(7.0), Math.toRadians(47.0-0.0000000000001))).normalized());
 
         try {
             switch (0) {
