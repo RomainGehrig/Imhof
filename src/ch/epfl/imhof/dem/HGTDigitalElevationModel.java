@@ -105,8 +105,9 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
         double longDiff = Math.toDegrees(pt.longitude() - basePoint.longitude());
         double latDiff = Math.toDegrees(pt.latitude() - basePoint.latitude());
 
-        if (latDiff > 1 || latDiff < 0 || longDiff > 1 || longDiff < 0)
+        if (latDiff > 1 || latDiff < 0 || longDiff > 1 || longDiff < 0) {
             throw new IllegalArgumentException("PointGeo is not in the correct range.");
+        }
 
         /*
           Schéma des vecteurs:
@@ -127,35 +128,29 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
         int j = bottomLeftY(Math.toDegrees(pt.latitude()));
 
         // Distance en mètres entre les points
-        double s = delta * Earth.RADIUS;
+        double s = Math.toRadians(delta) * Earth.RADIUS;
 
-        System.out.println("x");
         // Changement de j+1 en j-1 ici:
         double x = 1/2d * s * (heightAt(i,j) - heightAt(i+1,j) + heightAt(i,j-1) - heightAt(i+1,j-1));
-        System.out.println("y");
         // Changement de j+1 en j-1 ici:
         double y = 1/2d * s * (heightAt(i,j) + heightAt(i+1,j) - heightAt(i,j-1) - heightAt(i+1,j-1));
         double z = s * s;
 
-        return new Vector3(x,y,z);
+        return new Vector3(x,y,z).normalized();
     }
 
-    // FIXME PUBLIC
-    public short heightAt(int i, int j) {
-        System.out.print("i: " + i + " j: " + j + " index: " + (i + j*lineLength));
-        System.out.println(" value: " + buffer.get(i + j*(lineLength + 1)));
+    private short heightAt(int i, int j) {
+        // System.out.print("i: " + i + " j: " + j + " index: " + (i + j*lineLength));
+        // System.out.println(" value: " + buffer.get(i + j*(lineLength + 1)));
         return buffer.get(i + j*(lineLength + 1));
     }
 
-
-    // FIXME PUBLIC
-    public int bottomLeftX(double longitude) {
+    private int bottomLeftX(double longitude) {
         int x = (int) Math.floor((longitude - Math.toDegrees(basePoint.longitude())) * lineLength);
         return Math.min(x, lineLength-1);
     }
 
-    // FIXME PUBLIC
-    public int bottomLeftY(double latitude) {
+    private int bottomLeftY(double latitude) {
         int y = (int) Math.floor((latitude - Math.toDegrees(basePoint.latitude())) * lineLength);
         return (lineLength - Math.min(y, lineLength - 1));
     }
