@@ -78,7 +78,6 @@ public final class ReliefShader {
         // Sera utile pour calculer le cosinus
         Vector3 normLight = lightSource.normalized();
         BufferedImage relief = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D graphics = relief.createGraphics();
 
         for (int y=0; y<height; ++y) {
             for (int x=0; x<width; ++x) {
@@ -91,9 +90,7 @@ public final class ReliefShader {
                 double cos = normLight.scalarProduct(normal);
 
                 Color color = Color.rgb(1/2d*(cos + 1), 1/2d*(cos + 1), 1/2d*(0.7*cos + 1));
-                graphics.setColor(color.toAWTColor());
-                Rectangle pixel = new Rectangle(x,y,1,1);
-                graphics.draw(pixel);
+                relief.setRGB(x,y,color.toAWTColor().getRGB());
             }
         }
 
