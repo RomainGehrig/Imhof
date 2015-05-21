@@ -9,7 +9,6 @@ import ch.epfl.imhof.Attributed;
 import ch.epfl.imhof.painting.LineStyle.LineCap;
 import ch.epfl.imhof.painting.LineStyle.LineJoin;
 
-
 /**
  * représente un générateur de peintre de réseau routier
  * @author Yura Tak (247528)
@@ -22,16 +21,14 @@ public abstract class RoadPainterGenerator {
     // Constructeur privé
     private RoadPainterGenerator() {}
 
-    //TODO : ROMAIIIINNN : il faut retourner un painter à partir de mon tableau à deux dimensions avec le Stream T^T
     /**
-     *
-     * @param roadSpecs Un nombre variable de spécifications de routes passé en arguments
+     * Construit un painter à partir de spécifications pour les routes
+     * @param roadSpecs Un nombre variable de spécifications de routes passés en arguments
      * @return le peintre pour le réseau routier correspondant
      */
     public static Painter painterForRoads(RoadSpec... roadSpecs){
 
         List<List<Painter>> painters = new ArrayList<>();
-        List<Painter> ps = new ArrayList<>();
 
         for (int i=0; i<5; ++i) {
             painters.add(new ArrayList<>());
@@ -43,14 +40,13 @@ public abstract class RoadPainterGenerator {
             painters.get(2).add(roadSpec.RoadInSpec());
             painters.get(3).add(roadSpec.RoadOutSpec());
             painters.get(4).add(roadSpec.TunnelSpec());
-            ps.add(roadSpec.BridgeInSpec().above(roadSpec.BridgeOutSpec()).above(roadSpec.RoadInSpec()).above(roadSpec.RoadOutSpec()).above(roadSpec.TunnelSpec()));
         }
 
         Painter paint = painters.stream()
             .map(subPainters -> subPainters.stream().reduce(Painter::above).get())
             .reduce(Painter::above).get();
 
-        return paint; //ps.stream().reduce(null, (r,p) -> r == null ? p : p.above(r));
+        return paint;
     }
 
     /**

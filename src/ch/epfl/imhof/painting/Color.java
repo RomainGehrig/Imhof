@@ -87,12 +87,9 @@ public class Color {
      * @return la couleur correspondante
      */
     public static Color rgb(int rgb){
-        if ((rgb & 0xFFFFFF) != rgb)
-            throw new IllegalArgumentException("RGB value not in range");
-
         double r = ((rgb >> 16) & 0xFF) / 255d;
-        double g = ((rgb >> 8) & 0xFF) / 255d;
-        double b = ((rgb >> 0) & 0xFF) / 255d;
+        double g = ((rgb >>  8) & 0xFF) / 255d;
+        double b = ((rgb >>  0) & 0xFF) / 255d;
 
         return new Color(r, g, b);
     }
