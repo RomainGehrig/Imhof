@@ -43,7 +43,7 @@ public final class SwissPainter {
 
         Painter fgPainter =
                 roadPainter
-                .above(line(0.5f, darkGray, LineCap.Round, LineJoin.Miter, new float[]{1,2}).when(tagged("highway", "footway", "steps", "path", "track", "cycleway")))
+                .above(line(0.5f, darkGray, LineCap.Round, LineJoin.Miter, new float[]{1f, 2f}).when(tagged("highway", "footway", "steps", "path", "track", "cycleway")))
                 .above(polygon(darkGray).when(tagged("building")))
                 .above(polygon(lightBlue).when(tagged("leisure", "swimming_pool")))
                 .above(line(0.7f, darkRed).when(tagged("railway", "rail", "turntable")))
@@ -62,7 +62,6 @@ public final class SwissPainter {
                 .layered();
 
         PAINTER = fgPainter.above(bgPainter);
-
     }
 
     public static Painter painter() {
