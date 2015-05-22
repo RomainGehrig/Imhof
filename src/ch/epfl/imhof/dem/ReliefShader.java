@@ -62,20 +62,20 @@ public final class ReliefShader {
 
         BufferedImage relief = rawShadedRelief(width + pad*2,
                                                height + pad*2,
-                                               Point.alignedCoordinateChange(new Point(pad,pad),
-                                                                             new Point(width+pad,
-                                                                                       height+pad),
+                                               Point.alignedCoordinateChange(new Point(pad, pad),
+                                                                             new Point(width + pad,
+                                                                                       height + pad),
                                                                              botLeftPoint,
                                                                              topRightPoint));
         if (radius > 0) {
             Kernel kernel = createKernel((float) radius);
-            relief = applyGaussianBlur(kernel, relief).getSubimage(pad,pad,width,height);
+            relief = applyGaussianBlur(kernel, relief).getSubimage(pad, pad, width, height);
         }
         return relief;
     }
 
     private BufferedImage rawShadedRelief(int width, int height, Function<Point, Point> fromImageToPlane) {
-        // Sera utile pour calculer le cosinus
+        // Utile pour calculer le cosinus
         Vector3 normLight = lightSource.normalized();
         BufferedImage relief = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 

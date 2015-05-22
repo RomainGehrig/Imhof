@@ -10,5 +10,11 @@ import ch.epfl.imhof.PointGeo;
  *
  */
 public interface DigitalElevationModel extends AutoCloseable {
+
+    /**
+     * Retrourne le vecteur normal au terrain au point indiqué
+     * @param pt Le point géo où l'on veut le vecteur normal
+     * @return le vecteur normal (et normalisé) au terrain
+     */
     Vector3 normalAt(PointGeo x);
 }

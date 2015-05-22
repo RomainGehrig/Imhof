@@ -25,6 +25,12 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
     private final int lineLength;
     private final double delta; // en radians
 
+    /**
+     * Construit un modèle de terrain digital à partir d'un fichier
+     * @param file Le fichier HGT à lire
+     * @throws IOException Lancée lors de l'ouverture du fichier
+     * @throws IllegalArgumentException Si le fichier est invalide d'une façon ou d'une autre
+     */
     public HGTDigitalElevationModel(File file) throws IOException {
         double latitude = 0.0;
         double longitude = 0.0;
@@ -140,8 +146,6 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
     }
 
     private short heightAt(int i, int j) {
-        // System.out.print("i: " + i + " j: " + j + " index: " + (i + j*lineLength));
-        // System.out.println(" value: " + buffer.get(i + j*(lineLength + 1)));
         return buffer.get(i + j*(lineLength + 1));
     }
 
