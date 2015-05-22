@@ -22,7 +22,7 @@ public class LineStyle {
     };
 
     public enum LineJoin {
-        Bevel(BasicStroke.JOIN_BEVEL), Miter(BasicStroke.JOIN_MITER), Round(BasicStroke.JOIN_ROUND);
+        Round(BasicStroke.JOIN_ROUND), Bevel(BasicStroke.JOIN_BEVEL), Miter(BasicStroke.JOIN_MITER);
         private int AWTLineJoin;
         private LineJoin(int AWTLineJoin){
             this.AWTLineJoin = AWTLineJoin;
@@ -77,7 +77,7 @@ public class LineStyle {
      * @param width La largeur du trait
      * @param color La couleur du trait
      */
-    public LineStyle(float width, Color color){
+    public LineStyle(float width, Color color) {
         this(width, color, LineCap.Butt, LineJoin.Miter, null);
     }
 

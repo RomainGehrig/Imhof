@@ -10,7 +10,7 @@ import ch.epfl.imhof.painting.LineStyle.LineCap;
 import ch.epfl.imhof.painting.LineStyle.LineJoin;
 
 /**
- * représente un générateur de peintre de réseau routier
+ * Générateur de peintres de réseau routier
  * @author Yura Tak (247528)
  * @author Romain Gehrig (223316)
  *
@@ -79,22 +79,37 @@ public abstract class RoadPainterGenerator {
             this.cc = cc;
         }
 
+        /**
+         * @return Un painter pour l'intérieur des ponts
+         */
         public Painter BridgeInSpec(){
             return Painter.line(wi, ci, LineCap.Round, LineJoin.Round, null).when(filter.and(Filters.tagged("bridge")));
         }
 
+        /**
+         * @return Un painter pour l'extérieur des ponts
+         */
         public Painter BridgeOutSpec(){
             return Painter.line(wi+2*wc, cc, LineCap.Butt, LineJoin.Round, null).when(filter.and(Filters.tagged("bridge")));
         }
 
+        /**
+         * @return Un painter pour l'intérieur des routes
+         */
         public Painter RoadInSpec(){
             return Painter.line(wi, ci, LineCap.Round, LineJoin.Round, null).when(filter.and(Filters.notTagged("bridge").and(Filters.notTagged("tunnel"))));
         }
 
+        /**
+         * @return Un painter pour l'extérieur des routes
+         */
         public Painter RoadOutSpec(){
             return Painter.line(wi+2*wc, cc, LineCap.Round, LineJoin.Round, null).when(filter.and(Filters.notTagged("bridge").and(Filters.notTagged("tunnel"))));
         }
 
+        /**
+         * @return Un painter pour les tunnels
+         */
         public Painter TunnelSpec(){
             return Painter.line(wi/2, cc, LineCap.Butt, LineJoin.Round, new float[]{2*wi, 2*wi}).when(filter.and(Filters.tagged("tunnel")));
         }

@@ -14,9 +14,7 @@ import ch.epfl.imhof.Attributed;
  */
 public final class Filters {
 
-    /**
-     * construit les filtres
-     */
+    // Constructeur privé
     private Filters() {}
 
     /**

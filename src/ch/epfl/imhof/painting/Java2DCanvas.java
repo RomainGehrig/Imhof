@@ -14,30 +14,51 @@ import ch.epfl.imhof.geometry.Polygon;
 import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 
-public class Java2DCanvas implements Canvas{
+/**
+ *
+ * @author Yura Tak (247528)
+ * @author Romain Gehrig (223316)
+ *
+ */
+public class Java2DCanvas implements Canvas {
 
     private final Function<Point, Point> transformation;
     private final BufferedImage image;
     private final Graphics2D ctx;
 
-    public Java2DCanvas(Point BL, Point TR, int l, int h, int dpi, Color c){
+    /**
+     * Construit un canvas 2d sur lequel on peut dessiner
+     * @param BL Point bottom-left
+     * @param TR Point top-right
+     * @param width Largeur
+     * @param height Hauteur
+     * @param dpi Le nombre de dpi du canvas
+     * @param bgColor Couleur de fond
+     */
+    public Java2DCanvas(Point BL, Point TR, int width, int height, int dpi, Color bgColor){
 
         double pica = dpi/72.0;
 
-        this.transformation = Point.alignedCoordinateChange(BL, TR, new Point(0, h/pica), new Point(l/pica,0));
-        this.image = new BufferedImage(l, h, BufferedImage.TYPE_INT_RGB);
+        this.transformation = Point.alignedCoordinateChange(BL, TR,
+                                                            new Point(0, height/pica),
+                                                            new Point(width/pica,0));
+        this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         this.ctx = image.createGraphics();
         // Active l'anticrénelage.
         ctx.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
-        // Remplit le fond en rouge.
-        ctx.setColor(c.toAWTColor());
-        ctx.fillRect(0, 0, l, h);
+        // Remplit le fond
+        ctx.setColor(bgColor.toAWTColor());
+        ctx.fillRect(0, 0, width, height);
         // Change le repère pour que chaque côté soit de longueur unitaire…
         ctx.scale(pica, pica);
-
     }
 
+    /**
+     * Dessine une polyline avec le style proposé
+     * @param polyline La polyline à dessiner
+     * @param style Le style du dessin
+     */
     @Override
     public void drawPolyLine(PolyLine polyline, LineStyle style) {
         ctx.setColor(style.color().toAWTColor());
@@ -47,6 +68,11 @@ public class Java2DCanvas implements Canvas{
         ctx.draw(path);
     }
 
+    /**
+     * Dessine un polygone rempli avec la couleur proposée
+     * @param polygon Le polygone à dessiner
+     * @param color La couleur à utiliser
+     */
     @Override
     public void drawPolygon(Polygon polygon, Color color) {
         ctx.setColor(color.toAWTColor());
@@ -67,20 +93,21 @@ public class Java2DCanvas implements Canvas{
         Path2D path = new Path2D.Double();
         Point p = transformation.apply(polyline.firstPoint());
         path.moveTo(p.x(), p.y());
-        for(Point point : polyline.points()){
-            Point to = transformation.apply(point);
-            if(to != p){
-                path.lineTo(to.x(), to.y());
-            }
-        }
 
-        if(polyline.isClosed()){
+        polyline.points().stream()
+            .map(transformation::apply)
+            .forEach(point -> path.lineTo(point.x(), point.y()));
+
+        if (polyline.isClosed()){
             path.closePath();
         }
 
         return path;
     }
 
+    /**
+     * @return L'image du canvas
+     */
     public BufferedImage image(){
         return image;
     }
