@@ -10,6 +10,7 @@ import com.sun.prism.BasicStroke;
  */
 public class LineStyle {
 
+    // Terminaison de ligne
     public enum LineCap {
         Butt(BasicStroke.CAP_BUTT), Round(BasicStroke.CAP_ROUND), Square(BasicStroke.CAP_SQUARE);
         private int AWTLineCap;
@@ -21,6 +22,7 @@ public class LineStyle {
         }
     };
 
+    // Jointure de ligne
     public enum LineJoin {
         Round(BasicStroke.JOIN_ROUND), Bevel(BasicStroke.JOIN_BEVEL), Miter(BasicStroke.JOIN_MITER);
         private int AWTLineJoin;
