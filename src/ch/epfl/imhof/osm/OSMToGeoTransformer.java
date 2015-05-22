@@ -59,19 +59,14 @@ public final class OSMToGeoTransformer {
     }
 
     /**
-     * convertit une « carte » OSM en une carte géométrique projetée
-     * @param map
-     * @return
+     * convertit une  carte OSM en une carte géométrique projetée
+     * @param map La carte OSM que l'on veut transformer
+     * @returna La carte transformée
      */
     public Map transform(OSMMap map) {
         PolyLine.Builder polyLineBuilder;
         Map.Builder builder = new Map.Builder();
 
-        // System.out.println("FILTRE_POLYLINE" + FILTRE_POLYLINE);
-        // System.out.println("FILTRE_POLYGON" + FILTRE_POLYGON);
-
-
-        // System.out.println("Ways: " + map.ways());
         // Conversion des OSMWay
         for (OSMWay way: map.ways()) {
             polyLineBuilder = new PolyLine.Builder();
@@ -80,29 +75,26 @@ public final class OSMToGeoTransformer {
                 polyLineBuilder.addPoint(projection.project(node.position()));
             }
 
-            // way.attributes().PRINT();
             Attributes area_attr = way.attributes().keepOnlyKeys(AREA_ATTRIBUTS);
-            // area_attr.PRINT();
 
             boolean isClosed = AREA_VALUE.contains(way.attributeValue("area")) || !(area_attr.isEmpty());
 
             if (way.isClosed() && isClosed) {
                 Attributes attr = way.attributes().keepOnlyKeys(FILTRE_POLYGON);
-                // attr.PRINT();
-                // System.out.println("Attributes (closed): (contains something) " + !attr.isEmpty());
                 if (!attr.isEmpty()) // Il faut qu'il y ait des attributs pour pouvoir ajouter un polygone
                     builder.addPolygon(new Attributed<>(new Polygon(polyLineBuilder.buildClosed()),attr));
             } else {
                 Attributes attr = way.attributes().keepOnlyKeys(FILTRE_POLYLINE);
-                // attr.PRINT();
-                // System.out.println("Attributes (opened): (contains something) " + !attr.isEmpty());
-                if (!attr.isEmpty()) // Il faut qu'il y ait des attributs pour pouvoir ajouter une polyline
-                    builder.addPolyLine(new Attributed<>(polyLineBuilder.buildOpen(),attr));
+                if (!attr.isEmpty()) { // Il faut qu'il y ait des attributs pour pouvoir ajouter une polyline
+                    if (way.isClosed())
+                        builder.addPolyLine(new Attributed<>(polyLineBuilder.buildClosed(),attr));
+                    else
+                        builder.addPolyLine(new Attributed<>(polyLineBuilder.buildOpen(),attr));
+                }
             }
         }
 
         // Conversion des OSMRelation
-        // System.out.println("Relations: " + map.relations());
         for (OSMRelation rel: map.relations()) {
             if (rel.attributes().get("type", "").equals("multipolygon"))
                 for (Attributed<Polygon> poly: assemblePolygon(rel, rel.attributes()))
@@ -201,27 +193,6 @@ public final class OSMToGeoTransformer {
         return rings;
     }
 
-    /* Aucune utilité finalement :(
-    private Set<OSMNode> connectedNeighbors(Graph graph, OSMNode startNode) {
-        Set<OSMNode> visited = new HashSet<>();
-        Deque<OSMNode> toVisit = new LinkedList<>();
-
-        toVisit.addAll(graph.neighborsOf(startNode));
-        OSMNode currentNode = null;
-        while (!toVisit.isEmpty()) {
-            currentNode = toVisit.removeFirst();
-            visited.add(currentNode);
-
-            Set<OSMNode> neighbors = graph.neighborsOf(currentNode);
-            for (OSMNode neighbor: neighbors)
-                if (!visited.contains(neighbor))
-                    toVisit.add(neighbor);
-
-        }
-        return visited;
-    }
-    */
-
     /**
      * calcule et retourne la liste des polygones attribués de la relation donnée, en leur attachant les attributs donnés
      * @param relation
@@ -236,16 +207,11 @@ public final class OSMToGeoTransformer {
         if (attr.isEmpty())
             return attributedPolygons;
 
-        // System.out.println("Attributes: " + attr.size());
-
         List<ClosedPolyLine> inners = ringsForRole(relation, "inner");
         List<ClosedPolyLine> outers = ringsForRole(relation, "outer");
 
         if (inners == null || outers == null)
             return Collections.emptyList();
-
-        // System.out.println("inners: " + inners);
-        // System.out.println("outers: " + outers);
 
         java.util.Map<ClosedPolyLine, List<ClosedPolyLine>> plainPolygones = new HashMap<>();
         for (ClosedPolyLine out: outers)
