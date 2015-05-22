@@ -153,13 +153,13 @@ public final class OSMMapReader {
             try {
                 switch(lName) {
                 case "node":
-                    mapBuilder.addNode((OSMNode) (((OSMNode.Builder) elements.pop()).build()));
+                    mapBuilder.addNode(((OSMNode.Builder) elements.pop()).build());
                     break;
                 case "way":
-                    mapBuilder.addWay((OSMWay) (((OSMWay.Builder) elements.pop()).build()));
+                    mapBuilder.addWay(((OSMWay.Builder) elements.pop()).build());
                     break;
                 case "relation":
-                    mapBuilder.addRelation((OSMRelation) (((OSMRelation.Builder) elements.pop()).build()));
+                    mapBuilder.addRelation(((OSMRelation.Builder) elements.pop()).build());
                     break;
                 }
             } catch (IllegalStateException e) {
