@@ -17,4 +17,12 @@ public interface DigitalElevationModel extends AutoCloseable {
      * @return le vecteur normal (et normalisé) au terrain
      */
     Vector3 normalAt(PointGeo x);
+    /**
+     * Retrourne la hauteur (par rapport au niveau de la mer),
+     * elle peut être interpolée
+     * au point spécifié
+     * @param pt Le point géo où l'on veut la hauteur
+     * @return hauteur en mètres
+     */
+    double interpolatedHeightAt(PointGeo x);
 }

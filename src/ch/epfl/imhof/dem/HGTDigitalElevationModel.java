@@ -107,6 +107,21 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
         file.close();
     }
 
+    // FIXME interpolate!
+    public double interpolatedHeightAt(PointGeo pt) {
+        double longDiff = Math.toDegrees(pt.longitude() - basePoint.longitude());
+        double latDiff = Math.toDegrees(pt.latitude() - basePoint.latitude());
+
+        if (latDiff > 1 || latDiff < 0 || longDiff > 1 || longDiff < 0) {
+            throw new IllegalArgumentException("PointGeo is not in the correct range.");
+        }
+
+        int i = bottomLeftX(Math.toDegrees(pt.longitude()));
+        int j = bottomLeftY(Math.toDegrees(pt.latitude()));
+
+        return heightAt(i,j);
+    }
+
     public Vector3 normalAt(PointGeo pt) {
         double longDiff = Math.toDegrees(pt.longitude() - basePoint.longitude());
         double latDiff = Math.toDegrees(pt.latitude() - basePoint.latitude());
