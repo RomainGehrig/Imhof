@@ -68,6 +68,8 @@ public final class Mesh3D {
         int nbrHorizontalPoints = (int) Math.floor((tr.longitude() - bl.longitude())/delta) + 1;
         int nbrVerticalPoints = (int) Math.floor((tr.latitude() - bl.latitude())/delta) + 1;
 
+        System.out.println("Nb points: " + nbrHorizontalPoints + " horiz " + nbrVerticalPoints + " vert");
+
         Function<Double, Double> toXSize = (x) -> (x - bl.longitude()) / (tr.longitude() - bl.longitude())*500;
         Function<Double, Double> toYSize = (y) -> 500 - (y - bl.latitude()) / (tr.latitude() - bl.latitude())*500;
 
@@ -93,6 +95,8 @@ public final class Mesh3D {
                 points[pos + 0] = x / (float) nbrHorizontalPoints * 1000; //toXSize.apply(x).floatValue(); // composante x
                 points[pos + 1] = y / (float) nbrVerticalPoints * 1000; //toYSize.apply(y).floatValue(); // composante y
                 points[pos + 2] = height; // composante z
+
+                System.out.println("Point ");
                 pos += 3;
             }
         }
@@ -137,9 +141,12 @@ public final class Mesh3D {
         // 1 |_\ \|
         //
         pos = 0;
+        int diff = 0;
         for (int vs = 0; vs < nbrVerticalPoints - 1; ++vs) {
+            System.out.println("Vert: " + vs);
             for (int hs = 0; hs < nbrHorizontalPoints - 1; ++hs) {
-                int pos2 = hs + (nbrHorizontalPoints-1)*vs;
+                int pos2 = hs + (nbrHorizontalPoints-1)*vs + diff;
+                System.out.println("Horiz: " + hs + " pos: " + pos2);
 
                 // Triangle bas-gauche (1)
                 triangles[12*pos + 0] = pos2;
@@ -159,6 +166,7 @@ public final class Mesh3D {
 
                 pos += 1;
             }
+            diff += 1;
         }
 
         mesh.getFaces().setAll(triangles);

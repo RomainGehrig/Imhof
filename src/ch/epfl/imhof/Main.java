@@ -121,7 +121,7 @@ public class Main extends Application {
         Image texture = new Image("file:" + args[7]);
 
         System.out.println("Creating mesh");
-        Mesh3D mesh = new Mesh3D(geoBL, geoTR, 1000.0, dem);
+        Mesh3D mesh = new Mesh3D(geoBL, geoTR, 2000.0, dem);
         mesh.construct();
 
         MeshView meshView = new MeshView(mesh.mesh());
