@@ -1,4 +1,4 @@
-#+TITLE: Série n°9
+#+TITLE: Rapport bonus Imhof
 #+AUTHOR: Romain Gehrig
 #+LATEX_CLASS: article
 #+LaTeX_CLASS_OPTIONS: [a4paper]
@@ -11,3 +11,30 @@
 #+OPTIONS: toc:nil
 #+attr_latex: :environment tabulary :width \textwidth
 
+* Concept: Vue 3D de la carte
+
+L'idée intiale venait du fait que l'on possède les données en 3 dimensions des zones dont on génère les
+cartes ainsi que lesdites cartes, que l'on peut utiliser comme texture. Ainsi, à la place que l'on ait une
+impression de 3D avec le relief, on a directement accès à la représentation 3D de la carte!
+
+* Mise en place Java
+
+Je suis tombé par hasard sur JavaFX, ayant intégré le JDK à sa version 8, et qui de plus propose maintenant
+du support pour les graphismes 3D.
+
+Ce qui a été changé:
+
+- La classe Main a dû être changée pour devenir une =Application= (point d'entrée d'un programme qui 
+  utilise JavaFX). La méthode =main= a aussi dû être adaptée pour lancer l'application avec les arguments 
+  et ne rien faire d'autre. Tout le code JavaFX (et celui qui était avant dans =main=)
+  se trouve dans la méthode overridée =start=.
+
+* Améliorations
+
+** Structure du code
+
+Pour l'instant le code de la classe =Main= ressemble un peu trop à une longue procédure.
+
+** Interpolation des hauteurs
+
+Le même problème que pour le relief se 

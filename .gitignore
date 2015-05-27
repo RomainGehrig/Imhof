@@ -11,3 +11,7 @@ data/
 lib/
 checkstyle-config.xml
 *.png
+*.pdf
+*.tex
+*.pyg
+*.log
