@@ -61,13 +61,10 @@ public class Main extends Application {
 
         OSMMap osmMap = null;
         HGTDigitalElevationModel dem = null;
-        /*
         try {
             System.out.println("Reading OSM file");
             osmMap = OSMMapReader.readOSMFile(args[0],true);
-        */
             dem = new HGTDigitalElevationModel(new File(args[1]));
-            /*
         }
         catch (IOException e) {
             System.out.println(e.getMessage());
@@ -82,16 +79,17 @@ public class Main extends Application {
             System.out.println("Something went wrong when reading files. Exiting");
             System.exit(1);
         }
-        */
+
         PointGeo geoBL = new PointGeo(Math.toRadians(Double.parseDouble(args[2])),
                                       Math.toRadians(Double.parseDouble(args[3])));
         PointGeo geoTR = new PointGeo(Math.toRadians(Double.parseDouble(args[4])),
                                       Math.toRadians(Double.parseDouble(args[5])));
         Point bl = PROJECTION.project(geoBL);
         Point tr = PROJECTION.project(geoTR);
-        /*
+
         int dpi = Integer.parseInt(args[6]);
         File output = new File(args[7]);
+        File raw_output = new File("raw_" + args[7]);
 
         double pixelsPerMeter = dpi * 39.370079; // valeur donnée par le programme `units`
         int height = (int) Math.round(pixelsPerMeter * 1/25000d
@@ -114,14 +112,14 @@ public class Main extends Application {
         // Output
         try {
             ImageIO.write(mixImages(reliefImg, canvas.image()), "png", output);
+            ImageIO.write(canvas.image(), "png", raw_output);
         } catch (IOException e) {}
 
-        */
         System.out.println("Getting the texture");
-        Image texture = new Image("file:" + args[7]);
+        Image texture = new Image("file:" + raw_output.getPath());
 
         System.out.println("Creating mesh");
-        Mesh3D mesh = new Mesh3D(geoBL, geoTR, 2000.0, dem);
+        Mesh3D mesh = new Mesh3D(geoBL, geoTR, 50.0, dem);
         mesh.construct();
 
         MeshView meshView = new MeshView(mesh.mesh());
@@ -132,8 +130,6 @@ public class Main extends Application {
 
         ObservableFloatArray points = mesh.mesh().getPoints();
 
-        showHeadTail(mesh.mesh().getPoints(), 10);
-
         meshView.setMaterial(material);
         meshView.setCullFace(CullFace.NONE);
         meshView.setTranslateX(points.get(0));
@@ -143,10 +139,6 @@ public class Main extends Application {
         meshView.setRotate(-60);
         System.out.println("All done!");
 
-        //        for (int p = 0; p < 100; ++p) {
-        //            System.out.println("Point: " + points.get(3*p) + " x " + points.get(3*p + 1) + " y " + points.get(3*p + 2) + " z");
-        //        }
-
         final Group root = new Group(meshView);
         final Scene scene = new Scene(root, 1200, 1000, true);
 
@@ -155,19 +147,6 @@ public class Main extends Application {
         stage.show();
     }
 
-    private static void showHeadTail(ObservableFloatArray xs, int n) {
-        System.out.println("Array size: " + xs.size());
-        System.out.println("Head: ");
-        for (int x = 0; x < n; ++x) {
-            System.out.println(xs.get(x));
-        }
-        System.out.println();
-        System.out.println("Tail: ");
-        for (int x = xs.size() - n; x < xs.size(); ++x) {
-            System.out.println(xs.get(x));
-        }
-
-    }
     private static BufferedImage mixImages(BufferedImage a, BufferedImage b) {
         int width = a.getWidth();
         int height = a.getHeight();

@@ -39,52 +39,26 @@ public final class Mesh3D {
 
     public void construct() {
 
-        /*
-        float[] points_ = { 0,0,40,
-                            100,0,0,
-                            0,100,12,
-                            100,100,0 };
-
-        float[] textures_ = { 0,0,
-                              0,1,
-                              1,0,
-                              1,1 };
-
-        int[] triangles_ = { 0,0, 2,1, 1,2 };
-
-
-        mesh.getPoints().setAll(points_);
-        mesh.getFaces().setAll(triangles_);
-        mesh.getTexCoords().setAll(textures_);
-
-        if (true)
-            return;
-
-        */
-
         // delta radians entre chaque PointGeo
         double delta = cathetusLength * METERS_TO_RADIANS;
 
         int nbrHorizontalPoints = (int) Math.floor((tr.longitude() - bl.longitude())/delta) + 1;
         int nbrVerticalPoints = (int) Math.floor((tr.latitude() - bl.latitude())/delta) + 1;
 
-        System.out.println("Nb points: " + nbrHorizontalPoints + " horiz " + nbrVerticalPoints + " vert");
-
         Function<Double, Double> toXSize = (x) -> (x - bl.longitude()) / (tr.longitude() - bl.longitude())*500;
         Function<Double, Double> toYSize = (y) -> 500 - (y - bl.latitude()) / (tr.latitude() - bl.latitude())*500;
+
+        // position dans le tableau; variable utilisée pour chaque boucle
+        int pos = 0;
 
         // Il y a nbrHorizontalPoints * nbrVerticalPoints points, de chacun 3 coordonnées (x,y,z)
         float[] points = new float[3 * nbrHorizontalPoints * nbrVerticalPoints];
 
-        System.out.println("Mesh: construction des points 3D");
-
         float minHeight = (float) dem.interpolatedHeightAt(bl);
         float maxHeight = minHeight;
 
-        int pos = 0; // position dans le tableau
         double topLeftX = bl.longitude();
         double topLeftY = tr.latitude();
-        System.out.println(topLeftX + " " + topLeftY);
         for (int y = 0; y < nbrVerticalPoints; ++y) {
             for (int x = 0; x < nbrHorizontalPoints; ++x) {
                 float height = (float) dem.interpolatedHeightAt(new PointGeo(topLeftX + x*delta,
@@ -96,7 +70,6 @@ public final class Mesh3D {
                 points[pos + 1] = y / (float) nbrVerticalPoints * 1000; //toYSize.apply(y).floatValue(); // composante y
                 points[pos + 2] = height; // composante z
 
-                System.out.println("Point ");
                 pos += 3;
             }
         }
@@ -104,7 +77,7 @@ public final class Mesh3D {
         float diffHeight = maxHeight - minHeight;
         if (diffHeight != 0) {
             for (int x = 2; x < points.length; x += 3) {
-                points[x] = 0;//Math.abs((points[x] - minHeight) / diffHeight) * -200;
+                points[x] = Math.abs((points[x] - minHeight) / diffHeight) * -50;
             }
         }
 
@@ -141,32 +114,31 @@ public final class Mesh3D {
         // 1 |_\ \|
         //
         pos = 0;
-        int diff = 0;
+        int diff = 0; // il y a une différence à chaque 
+        int pointIndex = 0;
         for (int vs = 0; vs < nbrVerticalPoints - 1; ++vs) {
-            System.out.println("Vert: " + vs);
             for (int hs = 0; hs < nbrHorizontalPoints - 1; ++hs) {
-                int pos2 = hs + (nbrHorizontalPoints-1)*vs + diff;
-                System.out.println("Horiz: " + hs + " pos: " + pos2);
+                pointIndex = pos + diff;
 
                 // Triangle bas-gauche (1)
-                triangles[12*pos + 0] = pos2;
-                triangles[12*pos + 1] = pos2;
-                triangles[12*pos + 2] = pos2 + nbrHorizontalPoints;
-                triangles[12*pos + 3] = pos2 + nbrHorizontalPoints;
-                triangles[12*pos + 4] = pos2 + nbrHorizontalPoints + 1;
-                triangles[12*pos + 5] = pos2 + nbrHorizontalPoints + 1;
+                triangles[12*pos + 0] = pointIndex;
+                triangles[12*pos + 1] = pointIndex;
+                triangles[12*pos + 2] = pointIndex + nbrHorizontalPoints;
+                triangles[12*pos + 3] = pointIndex + nbrHorizontalPoints;
+                triangles[12*pos + 4] = pointIndex + nbrHorizontalPoints + 1;
+                triangles[12*pos + 5] = pointIndex + nbrHorizontalPoints + 1;
 
                 // Triangle haut-droite (2)
-                triangles[12*pos + 6] = pos2;
-                triangles[12*pos + 7] = pos2;
-                triangles[12*pos + 8] = pos2 + nbrHorizontalPoints + 1;
-                triangles[12*pos + 9] = pos2 + nbrHorizontalPoints + 1;
-                triangles[12*pos + 10] = pos2 + 1;
-                triangles[12*pos + 11] = pos2 + 1;
+                triangles[12*pos + 6] = pointIndex;
+                triangles[12*pos + 7] = pointIndex;
+                triangles[12*pos + 8] = pointIndex + nbrHorizontalPoints + 1;
+                triangles[12*pos + 9] = pointIndex + nbrHorizontalPoints + 1;
+                triangles[12*pos + 10] = pointIndex + 1;
+                triangles[12*pos + 11] = pointIndex + 1;
 
-                pos += 1;
+                ++pos;
             }
-            diff += 1;
+            ++diff;
         }
 
         mesh.getFaces().setAll(triangles);
