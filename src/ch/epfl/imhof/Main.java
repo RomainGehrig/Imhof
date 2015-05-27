@@ -32,6 +32,9 @@ import javafx.scene.*;
 import javafx.scene.shape.CullFace;
 import javafx.collections.*;
 import javafx.scene.transform.Rotate;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseButton;
+import javafx.event.EventHandler;
 
 
 /**
@@ -41,6 +44,10 @@ import javafx.scene.transform.Rotate;
  *
  */
 public class Main extends Application {
+
+    // TEST
+    double anchorX, anchorY;
+    double baseX, baseY;
 
     // Constantes
     private static final Painter PAINTER = SwissPainter.painter();
@@ -63,22 +70,22 @@ public class Main extends Application {
         HGTDigitalElevationModel dem = null;
         try {
             System.out.println("Reading OSM file");
-            osmMap = OSMMapReader.readOSMFile(args[0],true);
+            //    osmMap = OSMMapReader.readOSMFile(args[0],true);
             dem = new HGTDigitalElevationModel(new File(args[1]));
         }
         catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(1);
         }
-        catch (SAXException e) {
-            System.out.println(e.getMessage());
-            System.exit(1);
-        }
+        //     catch (SAXException e) {
+        //         System.out.println(e.getMessage());
+        //         System.exit(1);
+        //     }
 
-        if (osmMap == null || dem == null) {
-            System.out.println("Something went wrong when reading files. Exiting");
-            System.exit(1);
-        }
+        // if (osmMap == null || dem == null) {
+        //     System.out.println("Something went wrong when reading files. Exiting");
+        //     System.exit(1);
+        // }
 
         PointGeo geoBL = new PointGeo(Math.toRadians(Double.parseDouble(args[2])),
                                       Math.toRadians(Double.parseDouble(args[3])));
@@ -97,6 +104,9 @@ public class Main extends Application {
                                       * Earth.RADIUS);
         int width = (int) Math.round((tr.x() - bl.x()) / (tr.y() - bl.y()) * height);
 
+        System.out.println("Width: " + width + " Height: " + height);
+
+        /*
         System.out.println("Transforming OSMMap");
         Map map = new OSMToGeoTransformer(PROJECTION).transform(osmMap);
         Java2DCanvas canvas = new Java2DCanvas(bl, tr, width, height, dpi, Color.WHITE);
@@ -115,14 +125,40 @@ public class Main extends Application {
             ImageIO.write(canvas.image(), "png", raw_output);
         } catch (IOException e) {}
 
+        */
+
         System.out.println("Getting the texture");
         Image texture = new Image("file:" + raw_output.getPath());
 
         System.out.println("Creating mesh");
-        Mesh3D mesh = new Mesh3D(geoBL, geoTR, 50.0, dem);
-        mesh.construct();
+        Mesh3D mesh = new Mesh3D(geoBL, geoTR, 100.0, dem);
 
         MeshView meshView = new MeshView(mesh.mesh());
+
+        double ratio = width/height;
+        int windowWidth = (int) Math.round(Math.min(1600, width));
+        int windowHeight = (int) Math.round(windowWidth/ratio);
+
+        mesh.construct(windowWidth, windowHeight);
+
+        final Group root = new Group(meshView);
+        final Scene scene = new Scene(root, windowWidth, windowHeight, true);
+
+        scene.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent event) {
+                anchorX = event.getSceneX();
+                anchorY = event.getSceneY();
+                baseX = meshView.getTranslateX();
+                baseY = meshView.getTranslateY();
+            }
+        });
+
+        scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent event) {
+                meshView.setTranslateX(baseX + anchorX - event.getSceneX());
+                meshView.setTranslateY(baseY + anchorY - event.getSceneY());
+            }
+        });
 
         // Application de la texture
         PhongMaterial material = new PhongMaterial();//javafx.scene.paint.Color.DARKGREEN);
@@ -132,15 +168,12 @@ public class Main extends Application {
 
         meshView.setMaterial(material);
         meshView.setCullFace(CullFace.NONE);
-        meshView.setTranslateX(points.get(0));
-        meshView.setTranslateY(points.get(1));
-        meshView.setTranslateZ(points.get(2));
+        //        meshView.setTranslateX(points.get(0));
+        //        meshView.setTranslateY(points.get(1));
+        //        meshView.setTranslateZ(points.get(2));
         meshView.setRotationAxis(Rotate.X_AXIS);
         meshView.setRotate(-60);
         System.out.println("All done!");
-
-        final Group root = new Group(meshView);
-        final Scene scene = new Scene(root, 1200, 1000, true);
 
         scene.setCamera(new PerspectiveCamera(false));
         stage.setScene(scene);

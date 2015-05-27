@@ -37,7 +37,7 @@ public final class Mesh3D {
         this.tr = tr;
     }
 
-    public void construct() {
+    public void construct(int width, int height) {
 
         // delta radians entre chaque PointGeo
         double delta = cathetusLength * METERS_TO_RADIANS;
@@ -45,8 +45,8 @@ public final class Mesh3D {
         int nbrHorizontalPoints = (int) Math.floor((tr.longitude() - bl.longitude())/delta) + 1;
         int nbrVerticalPoints = (int) Math.floor((tr.latitude() - bl.latitude())/delta) + 1;
 
-        Function<Double, Double> toXSize = (x) -> (x - bl.longitude()) / (tr.longitude() - bl.longitude())*500;
-        Function<Double, Double> toYSize = (y) -> 500 - (y - bl.latitude()) / (tr.latitude() - bl.latitude())*500;
+        Function<Double, Double> toXSize = (x) -> (x - bl.longitude()) / (tr.longitude() - bl.longitude())*width;
+        Function<Double, Double> toYSize = (y) -> height*(1 - (y - bl.latitude()) / (tr.latitude() - bl.latitude()));
 
         // position dans le tableau; variable utilisée pour chaque boucle
         int pos = 0;
@@ -61,23 +61,30 @@ public final class Mesh3D {
         double topLeftY = tr.latitude();
         for (int y = 0; y < nbrVerticalPoints; ++y) {
             for (int x = 0; x < nbrHorizontalPoints; ++x) {
-                float height = (float) dem.interpolatedHeightAt(new PointGeo(topLeftX + x*delta,
-                                                                             topLeftY - y*delta));
-                minHeight = Math.min(minHeight, height);
-                maxHeight = Math.max(maxHeight, height);
+                double xpos = topLeftX + x*delta;
+                double ypos = topLeftY - y*delta;
+                float z = (float) dem.interpolatedHeightAt(new PointGeo(xpos,ypos));
+                minHeight = Math.min(minHeight, z);
+                maxHeight = Math.max(maxHeight, z);
 
-                points[pos + 0] = x / (float) nbrHorizontalPoints * 1000; //toXSize.apply(x).floatValue(); // composante x
-                points[pos + 1] = y / (float) nbrVerticalPoints * 1000; //toYSize.apply(y).floatValue(); // composante y
-                points[pos + 2] = height; // composante z
+                points[pos + 0] = toXSize.apply((double) xpos).floatValue(); // composante x
+                points[pos + 1] = toYSize.apply((double) ypos).floatValue(); // composante y
+                points[pos + 2] = z; // composante z
 
                 pos += 3;
             }
         }
 
+        // for (int x = 0; x < points.length; x += 3) {
+        //     System.out.println("Point: x: " + points[x]);
+        //     System.out.println("       y: " + points[x + 1]);
+        //     System.out.println("       z: " + points[x + 2]);
+        // }
+
         float diffHeight = maxHeight - minHeight;
         if (diffHeight != 0) {
             for (int x = 2; x < points.length; x += 3) {
-                points[x] = Math.abs((points[x] - minHeight) / diffHeight) * -50;
+                points[x] = Math.abs((points[x] - minHeight) / diffHeight) * -75;
             }
         }
 

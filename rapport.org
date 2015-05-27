@@ -1,0 +1,13 @@
+#+TITLE: Série n°9
+#+AUTHOR: Romain Gehrig
+#+LATEX_CLASS: article
+#+LaTeX_CLASS_OPTIONS: [a4paper]
+#+LATEX_HEADER: \usepackage{xfrac}
+#+LATEX_HEADER: \usepackage{indentfirst}
+#+LATEX_HEADER: \usepackage[bottom=10em]{geometry}
+#+LATEX_HEADER: \setlength{\parindent}{2em}
+#+LATEX_HEADER: \setlength{\parskip}{1em}
+#+LATEX_HEADER: \renewcommand{\baselinestretch}{1.5}
+#+OPTIONS: toc:nil
+#+attr_latex: :environment tabulary :width \textwidth
+
