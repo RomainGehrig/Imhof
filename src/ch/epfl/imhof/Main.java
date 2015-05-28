@@ -162,6 +162,7 @@ public class Main extends Application {
             Group root = new Group(meshView);
             Scene scene = new Scene(root, windowWidth, windowHeight, true);
 
+            // Event au clic d'un bouton
             scene.setOnMousePressed(new EventHandler<MouseEvent>() {
                     @Override public void handle(MouseEvent event) {
                         anchorX = event.getSceneX();
@@ -172,6 +173,7 @@ public class Main extends Application {
                     }
                 });
 
+            // Event durant le cliqué-glissé de la souris
             scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
                     @Override public void handle(MouseEvent event) {
                         if (event.getButton() == MouseButton.PRIMARY) {
@@ -187,16 +189,16 @@ public class Main extends Application {
             PhongMaterial material = new PhongMaterial();
             material.setDiffuseMap(texture);
 
-            ObservableFloatArray points = mesh.mesh().getPoints();
-
+            // Mise en place du mesh dans la scène
             meshView.setMaterial(material);
             meshView.setCullFace(CullFace.NONE);
             meshView.setRotationAxis(Rotate.X_AXIS);
             meshView.setRotate(-45);
-            System.out.println("All done!");
 
             scene.setCamera(new PerspectiveCamera(false));
             stage.setScene(scene);
+
+            System.out.println("All done!");
             stage.show();
         }
     }

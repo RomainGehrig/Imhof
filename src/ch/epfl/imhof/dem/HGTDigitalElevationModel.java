@@ -103,12 +103,7 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
             .asShortBuffer();
     }
 
-    public void close() throws IOException {
-        file.close();
-    }
-
-    // FIXME interpolate!
-    public double interpolatedHeightAt(PointGeo pt) {
+    public double getHeightAt(PointGeo pt) {
         double longDiff = Math.toDegrees(pt.longitude() - basePoint.longitude());
         double latDiff = Math.toDegrees(pt.latitude() - basePoint.latitude());
 
@@ -158,6 +153,10 @@ public final class HGTDigitalElevationModel implements DigitalElevationModel {
         double z = s * s;
 
         return new Vector3(x,y,z).normalized();
+    }
+
+    public void close() throws IOException {
+        file.close();
     }
 
     private short heightAt(int i, int j) {
