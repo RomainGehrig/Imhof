@@ -100,7 +100,7 @@ public class Main extends Application {
             System.exit(1);
         }
 
-        if (osmMap == null || dem == null) {
+        if ((osmMap == null || dem == null) && !skipMapCreation) {
             System.out.println("Something went wrong when reading files. Exiting");
             System.exit(1);
         }
@@ -122,26 +122,29 @@ public class Main extends Application {
                                       * Earth.RADIUS);
         int width = (int) Math.round((tr.x() - bl.x()) / (tr.y() - bl.y()) * height);
 
-        System.out.println("Transforming OSMMap");
-        Map map = new OSMToGeoTransformer(PROJECTION).transform(osmMap);
-        Java2DCanvas canvas = new Java2DCanvas(bl, tr, width, height, dpi, Color.WHITE);
+        if (!skipMapCreation) {
+            System.out.println("Transforming OSMMap");
+            Map map = new OSMToGeoTransformer(PROJECTION).transform(osmMap);
+            Java2DCanvas canvas = new Java2DCanvas(bl, tr, width, height, dpi, Color.WHITE);
 
-        System.out.println("Creating relief");
-        double gaussianBlurRadius = pixelsPerMeter * 1.7 * 1/1000d;
-        ReliefShader reliefShader = new ReliefShader(PROJECTION, dem, LIGHT_SOURCE);
-        BufferedImage reliefImg = reliefShader.shadedRelief(bl, tr, width, height, gaussianBlurRadius);
+            System.out.println("Creating relief");
+            double gaussianBlurRadius = pixelsPerMeter * 1.7 * 1/1000d;
+            ReliefShader reliefShader = new ReliefShader(PROJECTION, dem, LIGHT_SOURCE);
+            BufferedImage reliefImg = reliefShader.shadedRelief(bl, tr, width, height, gaussianBlurRadius);
 
-        System.out.println("Drawing in the canvas");
-        PAINTER.drawMap(map, canvas);
+            System.out.println("Drawing in the canvas");
+            PAINTER.drawMap(map, canvas);
 
-        // Output
-        try {
-            ImageIO.write(mixImages(reliefImg, canvas.image()), "png", output);
-        } catch (IOException e) {}
+            // Output
+            try {
+                ImageIO.write(mixImages(reliefImg, canvas.image()), "png", output);
+                if (render3d)
+                    ImageIO.write(canvas.image(), "png", raw_output);
+            } catch (IOException e) {}
+        }
 
         // Création du mesh et affichage de la fenêtre de l'application
         if (render3d) {
-            ImageIO.write(canvas.image(), "png", raw_output);
 
             System.out.println("Getting the texture");
             Image texture = new Image("file:" + raw_output.getPath());
