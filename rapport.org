@@ -17,17 +17,51 @@ L'idée intiale venait du fait que l'on possède les données en 3 dimensions de
 cartes ainsi que lesdites cartes, que l'on peut utiliser comme texture. Ainsi, à la place que l'on ait une
 impression de 3D avec le relief, on a directement accès à la représentation 3D de la carte!
 
+Pour utiliser le rendu 3D, il faut que le 1^{er} (ou 2^{ème}) paramètre soit =-render3d=. Exemple de la 
+liste de paramètres (pour une vue impressionnante d'Interlaken):
+
+#+BEGIN_EXAMPLE
+-render3d interlaken.osm.gz N46E007.hgt 7.7800 46.6445 7.9371 46.7261 
+   300 interlaken.png
+#+End_EXAMPLE
+
+** Utilisation de l'interface graphique: 
+- clic gauche + déplacement pour déplacer la carte en X,Y (coordonnées relatives à l'écran)
+- clic droit + déplacement pour incliner la carte
+
+** Paramètres optionnels: 
+Doivent être spécifiés en 1^{er} ou 2^{ème} paramètre (il faut cependant garder les autres paramètres):
+
+- =-render3d=: Active la génération et l'affichage de la carte en 3D
+- =-skipMapCreation= permet d'éviter la génération de la carte , il faut cependant
+  s'assurer que le fichier texture ainsi que la carte n'incorporant pas les
+  reliefs aient déjà été générés.
+
 * Mise en place Java
 
-Je suis tombé par hasard sur JavaFX, ayant intégré le JDK à sa version 8, et qui de plus propose maintenant
-du support pour les graphismes 3D.
+Java intègre, depuis sa version 8, JavaFX qui propose désormais du support pour les graphismes 3D.
 
-Ce qui a été changé:
+** Changements
+La classe Main a dû être changée pour devenir une =Application= (point d'entrée d'un programme qui 
+utilise JavaFX). La méthode =main= a aussi dû être adaptée pour lancer l'application avec les arguments 
+et ne rien faire d'autre. Tout le code JavaFX (et celui qui était avant dans =main=) se trouve dans 
+la méthode overridée =start=.
 
-- La classe Main a dû être changée pour devenir une =Application= (point d'entrée d'un programme qui 
-  utilise JavaFX). La méthode =main= a aussi dû être adaptée pour lancer l'application avec les arguments 
-  et ne rien faire d'autre. Tout le code JavaFX (et celui qui était avant dans =main=)
-  se trouve dans la méthode overridée =start=.
+La méthode =main= s'occupe désormais aussi de la gestion des paramètres optionnels =-render3d= et 
+=-skipMapCreation=, de la création du mesh 3D, de l'affichage de la scène et de l'ajout 
+d'=EventHandler= pour le déplacement du mesh.
+
+** Création
+La classe =Mesh3D= dans le package =dem= a été créée pour construire un mesh (de triangles) du
+terrain. La création se fait en deux temps: instanciation et construction. L'instantiation d'un
+objet =Mesh3D= se fait avec des paramètres spécifiant la taille que doivent représenter les triangles 
+(en mètres) et un modèle digital d'élevation.
+
+** Note sur la texture
+
+Matériel dit de Phong: influence la façon dont sont calculées les ombres
+
+=> on utilise la carte sans le relief, car les ombres sont calculées dynamiquement.
 
 * Améliorations
 
@@ -37,4 +71,10 @@ Pour l'instant le code de la classe =Main= ressemble un peu trop à une longue p
 
 ** Interpolation des hauteurs
 
-Le même problème que pour le relief se 
+Le même problème que pour le relief se pose: les données du modèle digital d'élevation sont
+assez grossières pour ce niveau de détails.
+
+** Triangles intelligents
+
+Diminuer le nombre de triangles aux endroits "lisses", augmenter aux endroits avec beaucoup
+de changements
