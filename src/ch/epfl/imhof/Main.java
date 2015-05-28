@@ -53,8 +53,8 @@ public class Main extends Application {
 
     // Coordonnées/angles utilisés pour la manipulation du mesh
     // dans la fenêtre de l'application
-    private double baseX, baseY, baseZ;
-    private double anchorX, anchorY, anchorZ;
+    private double baseX, baseY;
+    private double anchorX, anchorY;
     private double anchorAngle;
 
     /**
@@ -153,14 +153,14 @@ public class Main extends Application {
             Mesh3D mesh = new Mesh3D(100.0, dem);
 
             double ratio = width/(double)height;
-            int windowWidth = (int) Math.round(Math.min(1200, width));
-            int windowHeight = (int) Math.round(windowWidth/ratio);
+            int meshWidth = (int) Math.round(Math.min(1200, width));
+            int meshHeight = (int) Math.round(meshWidth/ratio);
 
-            mesh.construct(geoBL, geoTR, windowWidth, windowHeight);
+            mesh.construct(geoBL, geoTR, meshWidth, meshHeight);
 
             MeshView meshView = new MeshView(mesh.mesh());
             Group root = new Group(meshView);
-            Scene scene = new Scene(root, windowWidth, windowHeight, true);
+            Scene scene = new Scene(root, 1280, 980, true);
 
             // Event au clic d'un bouton
             scene.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -177,10 +177,10 @@ public class Main extends Application {
             scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
                     @Override public void handle(MouseEvent event) {
                         if (event.getButton() == MouseButton.PRIMARY) {
-                            meshView.setTranslateX(baseX + anchorX - event.getSceneX());
-                            meshView.setTranslateY(baseY + anchorY - event.getSceneY());
+                            meshView.setTranslateX(baseX - anchorX + event.getSceneX());
+                            meshView.setTranslateY(baseY - anchorY + event.getSceneY());
                         } else {
-                            meshView.setRotate(anchorAngle + anchorY - event.getSceneY());
+                            meshView.setRotate(anchorAngle - anchorY + event.getSceneY());
                         }
                     }
                 });

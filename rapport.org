@@ -11,6 +11,8 @@
 #+OPTIONS: toc:nil
 #+attr_latex: :environment tabulary :width \textwidth
 
+[[./interlaken_3d.png]]
+
 * Concept: Vue 3D de la carte
 
 L'idée intiale venait du fait que l'on possède les données en 3 dimensions des zones dont on génère les
@@ -51,30 +53,24 @@ La méthode =main= s'occupe désormais aussi de la gestion des paramètres optio
 =-skipMapCreation=, de la création du mesh 3D, de l'affichage de la scène et de l'ajout 
 d'=EventHandler= pour le déplacement du mesh.
 
-** Création
+** Nouveautés
 La classe =Mesh3D= dans le package =dem= a été créée pour construire un mesh (de triangles) du
-terrain. La création se fait en deux temps: instanciation et construction. L'instantiation d'un
-objet =Mesh3D= se fait avec des paramètres spécifiant la taille que doivent représenter les triangles 
-(en mètres) et un modèle digital d'élevation.
+terrain. Le mesh se construit en trois temps: création d'un tableau de points en 3 dimensions 
+représentants les sommets des triangles, création d'un tableau de points en 2 dimensions 
+représentants des points d'ancrage de la texture, et un troisième tableau créant des triangles
+en reliant les points donnés dans le 1er tableau ET les points des textures du 2ème tableau.
+La documentation officielle ne parlant pas des particularités de ces tableaux,
+il a fallu se documenter ailleurs. Les triangles ont été placés de manière naïve, en quadrillant
+la zone et en subdivisant ces carrés en triangles.
+
+Afin de pouvoir récupérer une hauteur à un point donné l'interface =DigitalElevationModel= a 
+été pourvue de la méthode =getHeightAt= retournant la hauteur à un =PointGeo=. 
+=HGTDigitalElevationModel= implémente donc celle-ci.
 
 ** Note sur la texture
 
-Matériel dit de Phong: influence la façon dont sont calculées les ombres
-
-=> on utilise la carte sans le relief, car les ombres sont calculées dynamiquement.
-
-* Améliorations
-
-** Structure du code
-
-Pour l'instant le code de la classe =Main= ressemble un peu trop à une longue procédure.
-
-** Interpolation des hauteurs
-
-Le même problème que pour le relief se pose: les données du modèle digital d'élevation sont
-assez grossières pour ce niveau de détails.
-
-** Triangles intelligents
-
-Diminuer le nombre de triangles aux endroits "lisses", augmenter aux endroits avec beaucoup
-de changements
+Pour ajouter une texture à un mesh, il faut d'abord créer un =Material= (classe abstraite) dont la
+seule sous-classe est =PhongMaterial= puis lui ajouter une image en temps que /DiffuseMap/. Ce type
+de matériau calcule dynamiquement les ombres en prenant en compte plusieurs types de sources 
+lumineuses. C'est grâce à cela qu'il n'y a pas besoin d'utiliser la carte avec les ombrages du 
+relief intégrés, car tout est calculé en temps réel lorsque l'on regarde la carte.
