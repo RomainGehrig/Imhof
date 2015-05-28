@@ -70,8 +70,8 @@ public final class Mesh3D {
                 float z = (float) dem.getHeightAt(new PointGeo(xpos,ypos));
                 minHeight = Math.min(minHeight, z);
 
-                points[pos + 0] = toX.apply((double) xpos).floatValue(); // composante x
-                points[pos + 1] = toY.apply((double) ypos).floatValue(); // composante y
+                points[pos + 0] = toX.apply(xpos).floatValue(); // composante x
+                points[pos + 1] = toY.apply(ypos).floatValue(); // composante y
                 points[pos + 2] = z; // composante z
 
                 pos += 3;

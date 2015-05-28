@@ -153,7 +153,7 @@ public class Main extends Application {
             Mesh3D mesh = new Mesh3D(100.0, dem);
 
             double ratio = width/(double)height;
-            int meshWidth = (int) Math.round(Math.min(1200, width));
+            int meshWidth = Math.round(Math.min(1200, width));
             int meshHeight = (int) Math.round(meshWidth/ratio);
 
             mesh.construct(geoBL, geoTR, meshWidth, meshHeight);

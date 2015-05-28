@@ -11,7 +11,7 @@
 #+OPTIONS: toc:nil
 #+attr_latex: :environment tabulary :width \textwidth
 
-[[./interlaken_3d.png]]
+[[./interlaken_3d.jpg]]
 
 * Concept: Vue 3D de la carte
 
