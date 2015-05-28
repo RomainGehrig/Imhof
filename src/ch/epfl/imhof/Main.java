@@ -23,7 +23,7 @@ import ch.epfl.imhof.painting.Painter;
 import ch.epfl.imhof.projection.Projection;
 import ch.epfl.imhof.projection.CH1903Projection;
 
-// TESTS
+// Affichage / 3D
 import javafx.scene.paint.PhongMaterial;
 import javafx.collections.*;
 import javafx.application.Application;
@@ -53,8 +53,8 @@ public class Main extends Application {
 
     // Coordonnées/angles utilisés pour la manipulation du mesh
     // dans la fenêtre de l'application
-    private double baseX, baseY;
-    private double anchorX, anchorY;
+    private double baseX, baseY, baseZ;
+    private double anchorX, anchorY, anchorZ;
     private double anchorAngle;
 
     /**
@@ -153,7 +153,7 @@ public class Main extends Application {
             Mesh3D mesh = new Mesh3D(100.0, dem);
 
             double ratio = width/(double)height;
-            int windowWidth = (int) Math.round(Math.min(1600, width));
+            int windowWidth = (int) Math.round(Math.min(1200, width));
             int windowHeight = (int) Math.round(windowWidth/ratio);
 
             mesh.construct(geoBL, geoTR, windowWidth, windowHeight);
@@ -199,6 +199,7 @@ public class Main extends Application {
             stage.setScene(scene);
 
             System.out.println("All done!");
+            stage.setResizable(false);
             stage.show();
         }
     }
